@@ -1,55 +1,54 @@
 # Calculator Hub
 
-A modern web application featuring various utility calculators, including a Snow Day Probability Calculator and Vorici Chromatic Calculator.
+A modern React-based web application featuring multiple specialized calculators. Built with Vite, React, and Material-UI.
 
-## Features
+## Available Calculators
 
-- Snow Day Calculator: Predict the probability of snow days based on weather conditions
-- Vorici Calculator: Calculate chromatic orb crafting probabilities
-- Dark/Light Theme: Toggle between dark and light modes
-- Quick Search: Easily find and navigate between different calculators
-- Responsive Design: Works on desktop and mobile devices
+1. **Snow Day Calculator**
+   - Predicts the likelihood of a snow day based on weather conditions
+   - Considers temperature, snowfall, and wind speed
+   - Provides probability-based predictions
 
-## Tech Stack
+2. **Vorici Calculator**
+   - Calculates Chromatic Orb crafting statistics for Path of Exile
+   - Features success rates, costs, and optimal strategies
+   - Includes crafting bench recommendations
+
+## Technologies Used
 
 - React 18
 - Vite
 - Material-UI
 - React Router
-- OpenWeatherMap API
+- React Helmet Async (for SEO)
 
 ## Getting Started
 
-1. Clone the repository
-```bash
-git clone https://github.com/yourusername/calculator-hub.git
-```
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-2. Install dependencies
-```bash
-cd calculator-hub
-npm install
-```
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-3. Create a `.env` file in the root directory and add your OpenWeatherMap API key:
-```
-VITE_OPENWEATHER_API_KEY=your_api_key_here
-```
+3. Build for production:
+   ```bash
+   npm run build
+   ```
 
-4. Start the development server
-```bash
-npm run dev
-```
+## Project Structure
 
-5. Build for production
-```bash
-npm run build
-```
+- `/src/components/Layout`: Common layout components
+- `/src/pages`: Individual calculator pages
+- `/src/App.jsx`: Main application component with routing
 
 ## Contributing
 
-Feel free to open issues and pull requests for any improvements you'd like to add.
+Feel free to contribute new calculators or improvements to existing ones. Please follow the existing code structure and ensure all calculators are SEO-optimized with relevant content.
 
 ## License
 
-MIT License - feel free to use this project for any purpose.
+MIT License
