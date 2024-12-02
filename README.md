@@ -1,54 +1,63 @@
 # Calculator Hub
 
-A modern React-based web application featuring multiple specialized calculators. Built with Vite, React, and Material-UI.
+A modern web application featuring various utility calculators, including a Snow Day Probability Calculator and Vorici Chromatic Calculator.
 
-## Available Calculators
+## Features
 
-1. **Snow Day Calculator**
-   - Predicts the likelihood of a snow day based on weather conditions
-   - Considers temperature, snowfall, and wind speed
-   - Provides probability-based predictions
+- 🌨 Snow Day Calculator: Predict the probability of snow days based on weather conditions
+- 🎮 Vorici Calculator: Calculate chromatic orb crafting probabilities
+- 🌓 Dark/Light Theme: Toggle between dark and light modes
+- 🔍 Quick Search: Easily find and navigate between calculators
+- 📱 Responsive Design: Works on desktop and mobile devices
 
-2. **Vorici Calculator**
-   - Calculates Chromatic Orb crafting statistics for Path of Exile
-   - Features success rates, costs, and optimal strategies
-   - Includes crafting bench recommendations
-
-## Technologies Used
+## Tech Stack
 
 - React 18
 - Vite
 - Material-UI
 - React Router
-- React Helmet Async (for SEO)
+- OpenWeatherMap API
 
 ## Getting Started
 
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
+### Prerequisites
 
-2. Start the development server:
-   ```bash
-   npm run dev
-   ```
+- Node.js 18.x or higher
+- npm or yarn
 
-3. Build for production:
-   ```bash
-   npm run build
-   ```
+### Installation
 
-## Project Structure
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/calculator-hub.git
+```
 
-- `/src/components/Layout`: Common layout components
-- `/src/pages`: Individual calculator pages
-- `/src/App.jsx`: Main application component with routing
+2. Install dependencies
+```bash
+cd calculator-hub
+npm install
+```
+
+3. Create a `.env` file in the root directory and add your OpenWeatherMap API key:
+```env
+VITE_OPENWEATHER_API_KEY=your_api_key_here
+```
+
+4. Start the development server
+```bash
+npm run dev
+```
+
+### Building for Production
+
+```bash
+npm run build
+```
 
 ## Contributing
 
-Feel free to contribute new calculators or improvements to existing ones. Please follow the existing code structure and ensure all calculators are SEO-optimized with relevant content.
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
 
-MIT License
+[MIT](https://choosealicense.com/licenses/mit/)
