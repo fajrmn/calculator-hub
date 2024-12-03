@@ -24,6 +24,7 @@ import {
   Divider,
 } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
+import InfoSection from '../components/InfoSection';
 
 const BodyFatCalculator = () => {
   const theme = useTheme();
@@ -358,6 +359,67 @@ const BodyFatCalculator = () => {
             </Grid>
           </Grid>
         </Paper>
+
+        <InfoSection title="Understanding Body Fat Percentage">
+          <Typography variant="body1">
+            Body fat percentage is a key indicator of your body composition, measuring the proportion of fat tissue relative to your total body weight. This measurement provides valuable insights into your overall health and fitness level.
+          </Typography>
+
+          <Typography variant="subtitle1" sx={{ mt: 2 }}>
+            Body Fat Categories for Men:
+          </Typography>
+          <Typography variant="body1">
+            • Essential Fat: 2-5% - Minimum needed for basic bodily functions
+            • Athletes: 6-13% - Typical for competitive athletes
+            • Fitness: 14-17% - Lean and defined muscle tone
+            • Average: 18-24% - Typical for healthy adults
+            • Above Average: 25%+ - May indicate increased health risks
+          </Typography>
+
+          <Typography variant="subtitle1" sx={{ mt: 2 }}>
+            Body Fat Categories for Women:
+          </Typography>
+          <Typography variant="body1">
+            • Essential Fat: 10-13% - Minimum needed for basic bodily functions
+            • Athletes: 14-20% - Typical for competitive athletes
+            • Fitness: 21-24% - Lean and defined muscle tone
+            • Average: 25-31% - Typical for healthy adults
+            • Above Average: 32%+ - May indicate increased health risks
+          </Typography>
+
+          <Typography variant="subtitle1" sx={{ mt: 2 }}>
+            U.S. Navy Method:
+          </Typography>
+          <Typography variant="body1">
+            This calculator uses the U.S. Navy circumference method, which:
+            • Is widely used for its simplicity and reasonable accuracy
+            • Requires only basic body measurements
+            • Provides quick results without specialized equipment
+            • Has been validated through numerous studies
+          </Typography>
+
+          <Typography variant="subtitle1" sx={{ mt: 2 }}>
+            Health Implications:
+          </Typography>
+          <Typography variant="body1">
+            • Too little body fat can impair hormone function and immune system
+            • Excess body fat increases risk of various health conditions
+            • Body fat distribution matters as much as total percentage
+            • Regular monitoring helps track fitness progress
+            • Results should be used alongside other health metrics
+          </Typography>
+
+          <Typography variant="subtitle1" sx={{ mt: 2 }}>
+            Tips for Accurate Measurements:
+          </Typography>
+          <Typography variant="body1">
+            • Measure in the morning before eating or drinking
+            • Use a flexible, non-stretching tape measure
+            • Keep the tape measure snug but not tight
+            • Take multiple measurements and average them
+            • Maintain consistency in measurement locations
+          </Typography>
+        </InfoSection>
       </Box>
     </Container>
   );

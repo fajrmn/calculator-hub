@@ -17,6 +17,7 @@ import {
   Divider,
 } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
+import InfoSection from '../components/InfoSection';
 
 const BMICalculator = () => {
   const theme = useTheme();
@@ -216,6 +217,43 @@ const BMICalculator = () => {
           </Paper>
         </Grid>
       </Grid>
+
+      <InfoSection title="Understanding BMI (Body Mass Index)">
+        <Typography variant="body1">
+          BMI (Body Mass Index) is a widely used screening tool that helps assess body weight categories and potential health risks. It's calculated using your height and weight measurements.
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          BMI Categories:
+        </Typography>
+        <Typography variant="body1" component="div">
+          • Underweight: Less than 18.5 - May indicate nutritional deficiencies or other health issues
+          • Normal Weight: 18.5 to 24.9 - Associated with lowest health risks for most people
+          • Overweight: 25 to 29.9 - May increase risk of health problems
+          • Obese: 30 or greater - Higher risk of several health conditions
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Important Considerations:
+        </Typography>
+        <Typography variant="body1">
+          • BMI is a screening tool, not a diagnostic measure
+          • It doesn't account for muscle mass, bone density, age, or gender
+          • Athletes and muscular individuals may have high BMIs despite healthy body composition
+          • Elderly individuals may need different BMI interpretations
+          • Some ethnic groups may have different healthy BMI ranges
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          When to Consult a Healthcare Provider:
+        </Typography>
+        <Typography variant="body1">
+          • If your BMI is outside the normal range
+          • Before starting any weight loss or gain program
+          • If you have concerns about your weight or body composition
+          • For personalized health advice based on your individual circumstances
+        </Typography>
+      </InfoSection>
     </Container>
   );
 };

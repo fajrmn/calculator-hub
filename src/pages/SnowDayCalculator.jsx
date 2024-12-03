@@ -26,6 +26,7 @@ import {
 } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import AcUnitIcon from '@mui/icons-material/AcUnit';
+import InfoSection from '../components/InfoSection';
 
 const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
 const DEBOUNCE_DELAY = 150;
@@ -556,6 +557,56 @@ const SnowDayCalculator = () => {
           </Paper>
         </Grid>
       </Grid>
+
+      <InfoSection title="Understanding Snow Day Probability">
+        <Typography variant="body1">
+          The Snow Day Calculator helps predict the likelihood of school or work closures due to winter weather conditions. This tool considers various meteorological and local factors to estimate closure probability.
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Key Factors Considered:
+        </Typography>
+        <Typography variant="body1">
+          • Predicted snowfall amount and timing
+          • Temperature and precipitation type
+          • Local area's typical response to snow
+          • Previous snow accumulation
+          • Day of the week
+          • School district policies
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          How to Interpret Results:
+        </Typography>
+        <Typography variant="body1">
+          • 0-25%: Low probability - Normal operations likely
+          • 26-50%: Moderate chance - Possible delay
+          • 51-75%: High chance - Prepare for closure
+          • 76-100%: Very high probability - Closure likely
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Important Notes:
+        </Typography>
+        <Typography variant="body1">
+          • Results are estimates based on historical data
+          • Local conditions may vary significantly
+          • School districts make final decisions
+          • Monitor official announcements
+          • Weather forecasts can change rapidly
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Safety Tips:
+        </Typography>
+        <Typography variant="body1">
+          • Stay informed through official channels
+          • Have backup childcare plans ready
+          • Keep emergency supplies stocked
+          • Plan for alternative work arrangements
+          • Follow local emergency guidelines
+        </Typography>
+      </InfoSection>
 
       <Snackbar
         open={snackbarOpen}

@@ -20,6 +20,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { Helmet } from 'react-helmet-async';
+import InfoSection from '../components/InfoSection';
 
 const GradeCalculator = () => {
   const [assignments, setAssignments] = useState([
@@ -289,6 +290,55 @@ const GradeCalculator = () => {
           </Paper>
         </Grid>
       </Grid>
+
+      <InfoSection title="Understanding Grade Calculations">
+        <Typography variant="body1">
+          The Grade Calculator helps students and educators calculate final grades, required scores for target grades, and weighted averages across different assignments and exams. This tool simplifies academic planning and grade tracking.
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Common Grade Scales:
+        </Typography>
+        <Typography variant="body1">
+          • A: 90-100% - Excellent performance
+          • B: 80-89% - Above average performance
+          • C: 70-79% - Average performance
+          • D: 60-69% - Below average performance
+          • F: Below 60% - Failing grade
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Types of Grade Calculations:
+        </Typography>
+        <Typography variant="body1">
+          • Weighted Averages: Different assignments carry different importance
+          • Cumulative GPA: Overall academic performance measure
+          • Required Scores: Calculate needed grades for target average
+          • Final Grade Projections: Estimate end-of-term grades
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Tips for Academic Success:
+        </Typography>
+        <Typography variant="body1">
+          • Track grades consistently throughout the term
+          • Understand course weight distributions
+          • Set realistic grade goals early
+          • Keep detailed records of all assignments
+          • Seek help early if struggling
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Important Notes:
+        </Typography>
+        <Typography variant="body1">
+          • Grade scales may vary by institution
+          • Some courses may use curve grading
+          • Extra credit may affect final grades
+          • Always verify calculations with official sources
+          • Consider both weighted and unweighted grades
+        </Typography>
+      </InfoSection>
     </Container>
   );
 };

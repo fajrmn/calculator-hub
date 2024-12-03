@@ -19,6 +19,7 @@ import {
   Divider,
 } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
+import InfoSection from '../components/InfoSection';
 
 const CalorieCalculator = () => {
   const theme = useTheme();
@@ -250,6 +251,56 @@ const CalorieCalculator = () => {
           </Paper>
         </Grid>
       </Grid>
+
+      <InfoSection title="Understanding Calorie Calculations">
+        <Typography variant="body1">
+          The Calorie Calculator helps determine your daily caloric needs based on your physical characteristics, activity level, and weight management goals. This tool is essential for planning a balanced diet and achieving your fitness objectives.
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Calorie Basics:
+        </Typography>
+        <Typography variant="body1">
+          • Calories are units of energy
+          • BMR (Basal Metabolic Rate) is your base calorie burn
+          • TDEE (Total Daily Energy Expenditure) includes activity
+          • Weight management depends on calorie balance
+          • 1 pound of fat equals approximately 3,500 calories
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Weight Management Goals:
+        </Typography>
+        <Typography variant="body1">
+          • Weight Loss: Create a calorie deficit
+          • Weight Maintenance: Balance intake with expenditure
+          • Weight Gain: Create a calorie surplus
+          • Muscle Building: Surplus with adequate protein
+          • Athletic Performance: Match energy needs
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Factors Affecting Calorie Needs:
+        </Typography>
+        <Typography variant="body1">
+          • Age: Metabolism typically slows with age
+          • Gender: Different body compositions affect needs
+          • Height and Weight: Larger bodies need more energy
+          • Activity Level: More movement requires more fuel
+          • Muscle Mass: More muscle increases calorie burn
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Important Considerations:
+        </Typography>
+        <Typography variant="body1">
+          • Results are estimates - adjust based on progress
+          • Quality of calories matters as much as quantity
+          • Sustainable changes are more effective
+          • Consult healthcare providers before major changes
+          • Monitor progress and adjust accordingly
+        </Typography>
+      </InfoSection>
     </Container>
   );
 };

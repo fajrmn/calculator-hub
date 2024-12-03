@@ -22,6 +22,7 @@ import {
   TableRow,
 } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
+import InfoSection from '../components/InfoSection';
 
 const BMRCalculator = () => {
   const theme = useTheme();
@@ -269,6 +270,56 @@ const BMRCalculator = () => {
           </Paper>
         </Grid>
       </Grid>
+
+      <InfoSection title="Understanding BMR (Basal Metabolic Rate)">
+        <Typography variant="body1">
+          BMR (Basal Metabolic Rate) represents the minimum amount of energy (calories) your body needs to maintain basic life functions while at complete rest. This includes breathing, blood circulation, cell production, and maintaining body temperature.
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          What Affects Your BMR:
+        </Typography>
+        <Typography variant="body1" component="div">
+          • Age: BMR typically decreases with age
+          • Gender: Men generally have higher BMR than women
+          • Body Composition: More muscle mass increases BMR
+          • Height and Weight: Larger bodies require more energy
+          • Genetics: Family history can influence metabolism
+          • Hormones: Thyroid and other hormones affect BMR
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Using BMR for Weight Management:
+        </Typography>
+        <Typography variant="body1">
+          • Weight Loss: Consume fewer calories than your total daily energy expenditure
+          • Weight Maintenance: Match calorie intake to energy expenditure
+          • Weight Gain: Consume more calories than your total daily energy expenditure
+          • Exercise: Increases total daily calorie needs above BMR
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Activity Level Multipliers:
+        </Typography>
+        <Typography variant="body1">
+          • Sedentary: BMR × 1.2 (Little or no exercise)
+          • Light Exercise: BMR × 1.375 (1-3 times/week)
+          • Moderate Exercise: BMR × 1.55 (4-5 times/week)
+          • Active: BMR × 1.725 (Daily exercise)
+          • Very Active: BMR × 1.9 (Intense exercise 6-7 times/week)
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Important Notes:
+        </Typography>
+        <Typography variant="body1">
+          • BMR calculations are estimates and may vary by individual
+          • Consult healthcare providers before starting any diet program
+          • Regular exercise can help increase your BMR
+          • Extreme dieting can lower your BMR
+          • Stay hydrated and maintain balanced nutrition
+        </Typography>
+      </InfoSection>
     </Container>
   );
 };

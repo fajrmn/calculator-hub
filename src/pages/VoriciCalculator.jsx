@@ -18,6 +18,7 @@ import {
   AlertTitle,
 } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
+import InfoSection from '../components/InfoSection';
 
 const VoriciCalculator = () => {
   const theme = useTheme();
@@ -320,6 +321,67 @@ const VoriciCalculator = () => {
           </Paper>
         </Grid>
       </Grid>
+
+      <InfoSection title="Understanding Vorici Chromatic Calculator">
+        <Typography variant="body1">
+          The Vorici Chromatic Calculator helps Path of Exile players determine the most efficient way to obtain desired socket colors on items using the crafting bench. This tool optimizes your chromatic orb usage by calculating the best crafting method based on item requirements and desired socket colors.
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Socket Color Mechanics:
+        </Typography>
+        <Typography variant="body1">
+          • Red sockets favor Strength requirements
+          • Green sockets favor Dexterity requirements
+          • Blue sockets favor Intelligence requirements
+          • Off-color sockets are harder to obtain
+          • Item requirements influence socket color probabilities
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Crafting Methods:
+        </Typography>
+        <Typography variant="body1">
+          • Regular Chromatic Orbs: Random color changes
+          • Crafting Bench: Guaranteed socket numbers
+          • Harvest Crafting: Targeted color changes
+          • Vorici in Research: White socket chances
+          • Socket Recipe: Specific color combinations
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Cost Considerations:
+        </Typography>
+        <Typography variant="body1">
+          • Chromatic Orb market value
+          • Crafting bench recipe costs
+          • Average attempts needed
+          • Alternative crafting methods
+          • Time investment versus buying ready items
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Advanced Tips:
+        </Typography>
+        <Typography variant="body1">
+          • Consider item level requirements
+          • Check for cheaper alternative items
+          • Calculate cost versus trade prices
+          • Save difficult combinations for endgame
+          • Use bench crafts for guaranteed results
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Important Notes:
+        </Typography>
+        <Typography variant="body1">
+          • Results are probability-based
+          • Actual costs may vary
+          • Game patches may affect calculations
+          • Consider league economy
+          • Some combinations are extremely rare
+        </Typography>
+      </InfoSection>
     </Container>
   );
 };

@@ -1,28 +1,5 @@
 export const tools = [
-  {
-    name: 'Snow Day Predictor',
-    description: 'Calculate the probability of a snow day based on weather conditions',
-    path: '/snow-day-calculator',
-    icon: '❄️',
-    category: 'Other Tools',
-    keywords: ['snow', 'weather', 'school', 'prediction', 'forecast']
-  },
-  {
-    name: 'Vorici Calculator',
-    description: 'Calculate chromatic orb crafting probabilities',
-    path: '/vorici-calculator',
-    icon: '🎮',
-    category: 'Gaming Tools',
-    keywords: ['vorici', 'crafting', 'chromatic', 'orb', 'socket']
-  },
-  {
-    name: 'Embed Generator',
-    description: 'Generate embed codes for various content types including YouTube videos, tweets, and more',
-    path: '/embed-generator',
-    icon: '🔗',
-    category: 'Productivity Tools',
-    keywords: ['embed', 'youtube', 'twitter', 'instagram', 'vimeo', 'iframe', 'social media', 'video']
-  },
+  // Fitness & Health Tools
   {
     name: 'BMI Calculator',
     description: 'Calculate your Body Mass Index (BMI) and get health insights',
@@ -55,6 +32,18 @@ export const tools = [
     category: 'Fitness & Health',
     keywords: ['body fat', 'percentage', 'navy method', 'health', 'fitness']
   },
+  
+  // Productivity Tools
+  {
+    name: 'Embed Generator',
+    description: 'Generate embed codes for various content types including YouTube videos, tweets, and more',
+    path: '/embed-generator',
+    icon: '🔗',
+    category: 'Productivity Tools',
+    keywords: ['embed', 'youtube', 'twitter', 'instagram', 'vimeo', 'iframe', 'social media', 'video']
+  },
+  
+  // Education Tools
   {
     name: 'Grade Calculator',
     description: 'Calculate weighted course grades and plan final exam scores needed to achieve desired grades',
@@ -62,6 +51,24 @@ export const tools = [
     icon: '📚',
     category: 'Education Tools',
     keywords: ['grade', 'education', 'school', 'exam', 'course', 'gpa']
+  },
+  
+  // Other Tools
+  {
+    name: 'Snow Day Predictor',
+    description: 'Calculate the probability of a snow day based on weather conditions',
+    path: '/snow-day-calculator',
+    icon: '❄️',
+    category: 'Other Tools',
+    keywords: ['snow', 'weather', 'school', 'prediction', 'forecast']
+  },
+  {
+    name: 'Vorici Calculator',
+    description: 'Calculate chromatic orb crafting probabilities',
+    path: '/vorici-calculator',
+    icon: '🎲',
+    category: 'Other Tools',
+    keywords: ['vorici', 'crafting', 'chromatic', 'orb', 'socket']
   }
   // Add more tools here as they become available
 ];

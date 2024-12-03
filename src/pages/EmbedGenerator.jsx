@@ -20,6 +20,7 @@ import {
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { Helmet } from 'react-helmet-async';
 import EmbedPreview from '../components/EmbedPreview';
+import InfoSection from '../components/InfoSection';
 
 const EmbedGenerator = () => {
   const theme = useTheme();
@@ -297,6 +298,67 @@ const EmbedGenerator = () => {
           </Paper>
         </Grid>
       </Grid>
+
+      <InfoSection title="Understanding Calculator Embedding">
+        <Typography variant="body1">
+          The Embed Code Generator creates HTML code snippets that allow you to integrate our calculators into your own website. This tool makes it easy to share our powerful calculation tools with your audience while maintaining full functionality and styling.
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Embedding Benefits:
+        </Typography>
+        <Typography variant="body1">
+          • Seamless integration with your website
+          • Automatic updates when calculators improve
+          • No additional server resources needed
+          • Mobile-responsive design included
+          • Customizable appearance options
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Implementation Guide:
+        </Typography>
+        <Typography variant="body1">
+          • Copy the generated code snippet
+          • Paste into your HTML where desired
+          • Test the embedded calculator
+          • Adjust width/height as needed
+          • Ensure proper loading on all devices
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Technical Considerations:
+        </Typography>
+        <Typography variant="body1">
+          • Uses iFrame technology for security
+          • Responsive design adapts to container
+          • Cross-browser compatible
+          • HTTPS support for secure connections
+          • Minimal impact on page load time
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Best Practices:
+        </Typography>
+        <Typography variant="body1">
+          • Place calculators in relevant content areas
+          • Allow sufficient space for optimal display
+          • Consider mobile viewing experience
+          • Test embedding on development site first
+          • Monitor calculator performance
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Support Notes:
+        </Typography>
+        <Typography variant="body1">
+          • Documentation available for troubleshooting
+          • Regular updates and maintenance
+          • Compatible with most web platforms
+          • Custom integration support available
+          • Community forums for assistance
+        </Typography>
+      </InfoSection>
 
       <Snackbar
         open={copied}
