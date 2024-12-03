@@ -9,6 +9,7 @@ import EmbedGenerator from './pages/EmbedGenerator';
 import BMICalculator from './pages/BMICalculator';
 import CalorieCalculator from './pages/CalorieCalculator';
 import GradeCalculator from './pages/GradeCalculator';
+import BodyFatCalculator from './pages/BodyFatCalculator';
 import { ThemeProvider } from './context/ThemeContext';
 import { Navigate } from 'react-router-dom';
 
@@ -25,6 +26,7 @@ function App() {
               <Route path="/embed-generator" element={<EmbedGenerator />} />
               <Route path="/bmi-calculator" element={<BMICalculator />} />
               <Route path="/calorie-calculator" element={<CalorieCalculator />} />
+              <Route path="/body-fat-calculator" element={<BodyFatCalculator />} />
               <Route path="/grade-calculator" element={<GradeCalculator />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

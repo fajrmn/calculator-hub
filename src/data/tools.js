@@ -40,12 +40,20 @@ export const tools = [
     keywords: ['calories', 'nutrition', 'diet', 'weight loss', 'weight gain', 'fitness', 'health', 'metabolism']
   },
   {
+    name: 'Body Fat Calculator',
+    description: 'Estimate your body fat percentage using the U.S. Navy method',
+    path: '/body-fat-calculator',
+    icon: '💪',
+    category: 'Fitness & Health',
+    keywords: ['body fat', 'percentage', 'navy method', 'health', 'fitness']
+  },
+  {
     name: 'Grade Calculator',
     description: 'Calculate weighted course grades and plan final exam scores needed to achieve desired grades',
     path: '/grade-calculator',
     icon: '📚',
-    category: 'Other Tools',
-    keywords: ['education', 'grades', 'gpa', 'academic', 'school', 'college', 'university', 'exam']
+    category: 'Education Tools',
+    keywords: ['grade', 'education', 'school', 'exam', 'course', 'gpa']
   }
   // Add more tools here as they become available
 ];
