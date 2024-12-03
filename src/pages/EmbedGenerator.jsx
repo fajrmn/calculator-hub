@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Typography,
   Paper,
@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { Helmet } from 'react-helmet-async';
+import EmbedPreview from '../components/EmbedPreview';
 
 const EmbedGenerator = () => {
   const [url, setUrl] = useState('');
@@ -104,10 +105,6 @@ const EmbedGenerator = () => {
     setCopied(false);
   };
 
-  const previewEmbedCode = () => {
-    return { __html: embedCode };
-  };
-
   return (
     <>
       <Helmet>
@@ -141,7 +138,7 @@ const EmbedGenerator = () => {
             onChange={(e) => setUrl(e.target.value)}
             margin="normal"
             error={!!error}
-            helperText={error}
+            helperText={error || 'Enter the URL of the content you want to embed'}
           />
 
           {embedType !== 'twitter' && embedType !== 'instagram' && (
@@ -199,19 +196,11 @@ const EmbedGenerator = () => {
                 </IconButton>
               </Box>
 
-              <Typography variant="h6" gutterBottom>
-                Preview
-              </Typography>
-              <Box
-                sx={{
-                  border: '1px solid #ddd',
-                  borderRadius: 1,
-                  p: 2,
-                  overflow: 'hidden',
-                }}
-              >
-                <div dangerouslySetInnerHTML={previewEmbedCode()} />
-              </Box>
+              <EmbedPreview 
+                embedCode={embedCode}
+                width={width}
+                height={height}
+              />
             </>
           )}
         </Box>
