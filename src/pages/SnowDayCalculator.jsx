@@ -264,8 +264,16 @@ const SnowDayCalculator = () => {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Helmet>
-        <title>Snow Day Calculator - Calculator Hub</title>
-        <meta name="description" content="Calculate the probability of a snow day based on weather conditions" />
+        <title>Snow Day Predictor | Calculate Snow Day Chances - Calculator Hub</title>
+        <meta name="description" content="Predict the likelihood of a snow day with our accurate Snow Day Calculator. Uses real-time weather data and historical patterns to forecast school closures. Free and easy to use!" />
+        <meta name="keywords" content="snow day calculator, snow day predictor, school closure calculator, weather prediction tool, snow day forecast" />
+        <meta property="og:title" content="Snow Day Predictor | Calculate Snow Day Chances" />
+        <meta property="og:description" content="Get accurate predictions for snow days using real-time weather data. Perfect for students, parents, and teachers planning ahead." />
+        <meta property="og:type" content="website" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://calculator-hub.netlify.app/snow-day-calculator" />
+        <meta name="author" content="Calculator Hub" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Helmet>
 
       <Typography 
