@@ -15,9 +15,17 @@ import {
   useTheme,
   useMediaQuery,
   Divider,
+  Tabs,
+  Tab,
+  IconButton,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import InfoSection from '../components/InfoSection';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import ShareIcon from '@mui/icons-material/Share';
+import CodeIcon from '@mui/icons-material/Code';
 
 const BMICalculator = () => {
   const theme = useTheme();
@@ -29,7 +37,32 @@ const BMICalculator = () => {
     unit: 'metric',
   });
 
+  const [activeTab, setActiveTab] = useState(0);
+  const [copied, setCopied] = useState(false);
+  const [shareUrl] = useState(window.location.href);
+  const [embedCode] = useState(`<iframe
+  src="${window.location.origin}/bmi-calculator"
+  width="100%"
+  height="800"
+  frameborder="0"
+  style="border: 1px solid #ccc; border-radius: 4px;"
+  title="BMI Calculator"
+></iframe>`);
+
   const [result, setResult] = useState(null);
+
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
+
+  const handleCopy = (text) => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+  };
+
+  const handleCloseCopied = () => {
+    setCopied(false);
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -218,6 +251,50 @@ const BMICalculator = () => {
         </Grid>
       </Grid>
 
+      <Paper sx={{ mt: 4, p: 3 }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
+          <Tabs value={activeTab} onChange={handleTabChange} aria-label="sharing options">
+            <Tab icon={<ShareIcon />} label="Share Link" />
+            <Tab icon={<CodeIcon />} label="Embed" />
+          </Tabs>
+        </Box>
+
+        {activeTab === 0 && (
+          <Box>
+            <Typography variant="subtitle1" gutterBottom>
+              Share this BMI Calculator
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, bgcolor: 'grey.100', p: 2, borderRadius: 1 }}>
+              <Typography variant="body2" sx={{ flexGrow: 1, fontFamily: 'monospace' }}>
+                {shareUrl}
+              </Typography>
+              <IconButton onClick={() => handleCopy(shareUrl)} size="small">
+                <ContentCopyIcon />
+              </IconButton>
+            </Box>
+          </Box>
+        )}
+
+        {activeTab === 1 && (
+          <Box>
+            <Typography variant="subtitle1" gutterBottom>
+              Embed this calculator on your website
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'start', gap: 1, bgcolor: 'grey.100', p: 2, borderRadius: 1 }}>
+              <Typography variant="body2" sx={{ flexGrow: 1, fontFamily: 'monospace', whiteSpace: 'pre-wrap' }}>
+                {embedCode}
+              </Typography>
+              <IconButton onClick={() => handleCopy(embedCode)} size="small">
+                <ContentCopyIcon />
+              </IconButton>
+            </Box>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+              Note: The embedded calculator will inherit your website's styles. You can adjust the width and height as needed.
+            </Typography>
+          </Box>
+        )}
+      </Paper>
+
       <InfoSection title="Understanding BMI (Body Mass Index)">
         <Typography variant="body1">
           BMI (Body Mass Index) is a widely used screening tool that helps assess body weight categories and potential health risks. It's calculated using your height and weight measurements.
@@ -254,6 +331,12 @@ const BMICalculator = () => {
           • For personalized health advice based on your individual circumstances
         </Typography>
       </InfoSection>
+
+      <Snackbar open={copied} autoHideDuration={2000} onClose={handleCloseCopied}>
+        <Alert severity="success" sx={{ width: '100%' }}>
+          Copied to clipboard!
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
