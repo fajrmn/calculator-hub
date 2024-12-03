@@ -13,12 +13,17 @@ import {
   IconButton,
   Snackbar,
   Grid,
+  Container,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { Helmet } from 'react-helmet-async';
 import EmbedPreview from '../components/EmbedPreview';
 
 const EmbedGenerator = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [url, setUrl] = useState('');
   const [width, setWidth] = useState('600');
   const [height, setHeight] = useState('400');
@@ -107,22 +112,55 @@ const EmbedGenerator = () => {
   };
 
   return (
-    <>
+    <Container maxWidth="xl" sx={{ py: 4 }}>
       <Helmet>
         <title>Embed Code Generator - Calculator Hub</title>
         <meta name="description" content="Generate embed codes for various content types including YouTube videos, tweets, and more. Customize size and preview before embedding." />
       </Helmet>
 
-      <Typography variant="h4" component="h1" gutterBottom>
+      <Typography 
+        variant="h4" 
+        component="h1" 
+        gutterBottom
+        sx={{ 
+          mb: 4,
+          textAlign: { xs: 'center', md: 'left' },
+          fontSize: { xs: '1.75rem', md: '2.125rem' }
+        }}
+      >
         Embed Code Generator
       </Typography>
 
-      <Grid container spacing={3}>
+      <Grid 
+        container 
+        spacing={{ xs: 2, md: 3 }} 
+        sx={{ 
+          minHeight: '70vh',
+          alignItems: 'stretch'
+        }}
+      >
         {/* Input Form Section */}
         <Grid item xs={12} md={6}>
-          <Paper elevation={3} sx={{ p: 3, height: '100%' }}>
-            <Box component="form" noValidate>
-              <FormControl fullWidth sx={{ mb: 2 }}>
+          <Paper 
+            elevation={3} 
+            sx={{ 
+              p: { xs: 2, sm: 3 },
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column'
+            }}
+          >
+            <Box 
+              component="form" 
+              noValidate 
+              sx={{ 
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+                height: '100%'
+              }}
+            >
+              <FormControl>
                 <InputLabel>Embed Type</InputLabel>
                 <Select
                   value={embedType}
@@ -140,36 +178,49 @@ const EmbedGenerator = () => {
                 label="URL"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                margin="normal"
                 error={!!error}
                 helperText={error || 'Enter the URL of the content you want to embed'}
+                sx={{ mt: 1 }}
               />
 
               {embedType !== 'twitter' && embedType !== 'instagram' && (
-                <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+                <Box 
+                  sx={{ 
+                    display: 'grid',
+                    gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+                    gap: 2
+                  }}
+                >
                   <TextField
                     label="Width"
                     type="number"
                     value={width}
                     onChange={(e) => setWidth(e.target.value)}
-                    sx={{ mt: 2 }}
+                    fullWidth
                   />
                   <TextField
                     label="Height"
                     type="number"
                     value={height}
                     onChange={(e) => setHeight(e.target.value)}
-                    sx={{ mt: 2 }}
+                    fullWidth
                   />
                 </Box>
               )}
+
+              <Box sx={{ flexGrow: 1 }} />
 
               <Button
                 variant="contained"
                 color="primary"
                 onClick={generateEmbedCode}
                 fullWidth
-                sx={{ mt: 2, mb: 2 }}
+                size="large"
+                sx={{ 
+                  mt: 2,
+                  py: 1.5,
+                  fontSize: '1.1rem'
+                }}
               >
                 Generate Embed Code
               </Button>
@@ -179,39 +230,70 @@ const EmbedGenerator = () => {
 
         {/* Preview and Code Section */}
         <Grid item xs={12} md={6}>
-          {embedCode && (
-            <Paper elevation={3} sx={{ p: 3, height: '100%' }}>
-              <Box sx={{ position: 'relative', mb: 3 }}>
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={4}
-                  value={embedCode}
-                  label="Embed Code"
-                  variant="outlined"
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                />
-                <IconButton
-                  onClick={handleCopy}
-                  sx={{
-                    position: 'absolute',
-                    right: 8,
-                    top: 8,
-                  }}
-                >
-                  <ContentCopyIcon />
-                </IconButton>
+          <Paper 
+            elevation={3} 
+            sx={{ 
+              p: { xs: 2, sm: 3 },
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              opacity: embedCode ? 1 : 0.5,
+              transition: 'opacity 0.3s ease'
+            }}
+          >
+            {!embedCode && (
+              <Box 
+                sx={{ 
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '100%',
+                  textAlign: 'center',
+                  color: 'text.secondary'
+                }}
+              >
+                <Typography variant="h6">
+                  Generate an embed code to see the preview here
+                </Typography>
               </Box>
+            )}
+            {embedCode && (
+              <>
+                <Box sx={{ mb: 3 }}>
+                  <TextField
+                    fullWidth
+                    multiline
+                    rows={4}
+                    value={embedCode}
+                    label="Embed Code"
+                    variant="outlined"
+                    InputProps={{
+                      readOnly: true,
+                      sx: { 
+                        fontFamily: 'monospace',
+                        fontSize: '0.9rem'
+                      }
+                    }}
+                  />
+                  <Button
+                    onClick={handleCopy}
+                    startIcon={<ContentCopyIcon />}
+                    sx={{ mt: 1 }}
+                  >
+                    Copy Code
+                  </Button>
+                </Box>
 
-              <EmbedPreview 
-                embedCode={embedCode}
-                width={width}
-                height={height}
-              />
-            </Paper>
-          )}
+                <Box sx={{ flexGrow: 1, minHeight: 0 }}>
+                  <EmbedPreview 
+                    embedCode={embedCode}
+                    width={width}
+                    height={height}
+                  />
+                </Box>
+              </>
+            )}
+          </Paper>
         </Grid>
       </Grid>
 
@@ -220,8 +302,12 @@ const EmbedGenerator = () => {
         autoHideDuration={2000}
         onClose={handleSnackbarClose}
         message="Embed code copied to clipboard!"
+        anchorOrigin={{ 
+          vertical: 'bottom',
+          horizontal: isMobile ? 'center' : 'right'
+        }}
       />
-    </>
+    </Container>
   );
 };
 

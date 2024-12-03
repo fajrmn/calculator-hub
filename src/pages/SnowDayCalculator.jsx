@@ -1,14 +1,18 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import {
+  Container,
   Typography,
-  Paper,
   TextField,
   Button,
+  Paper,
   Box,
-  Alert,
+  Grid,
   CircularProgress,
-  Tab,
+  Alert,
+  useTheme,
+  useMediaQuery,
   Tabs,
+  Tab,
   Autocomplete,
   FormControl,
   InputLabel,
@@ -18,7 +22,7 @@ import {
   Snackbar
 } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
-import { COMMON_CITIES } from '../data/commonCities';
+import AcUnitIcon from '@mui/icons-material/AcUnit';
 
 const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
 const DEBOUNCE_DELAY = 150;
@@ -30,27 +34,54 @@ const COUNTRIES = [
   { code: 'AU', name: 'Australia' }
 ];
 
+const COMMON_CITIES = {
+  US: [
+    { name: 'New York', state: 'NY' },
+    { name: 'Los Angeles', state: 'CA' },
+    { name: 'Chicago', state: 'IL' },
+    { name: 'Houston', state: 'TX' },
+    { name: 'Phoenix', state: 'AZ' },
+  ],
+  CA: [
+    { name: 'Toronto', state: 'ON' },
+    { name: 'Montreal', state: 'QC' },
+    { name: 'Vancouver', state: 'BC' },
+    { name: 'Calgary', state: 'AB' },
+    { name: 'Ottawa', state: 'ON' },
+  ],
+  GB: [
+    { name: 'London', state: '' },
+    { name: 'Birmingham', state: '' },
+    { name: 'Manchester', state: '' },
+    { name: 'Leeds', state: '' },
+    { name: 'Glasgow', state: '' },
+  ],
+  AU: [
+    { name: 'Sydney', state: 'NSW' },
+    { name: 'Melbourne', state: 'VIC' },
+    { name: 'Brisbane', state: 'QLD' },
+    { name: 'Perth', state: 'WA' },
+    { name: 'Adelaide', state: 'SA' },
+  ],
+};
+
 const SnowDayCalculator = () => {
-  // Form States
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [searchType, setSearchType] = useState('city');
   const [selectedCountry, setSelectedCountry] = useState('US');
   const [zipCode, setZipCode] = useState('');
   const [cityName, setCityName] = useState('');
   const [cityInputValue, setCityInputValue] = useState('');
-
-  // API States
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [weatherData, setWeatherData] = useState(null);
   const [prediction, setPrediction] = useState(null);
   const [loadingCities, setLoadingCities] = useState(false);
   const [serverCitySuggestions, setServerCitySuggestions] = useState([]);
-
-  // UI States
   const [shareSuccess, setShareSuccess] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
-  // Memoized city suggestions
   const instantCitySuggestions = useMemo(() => {
     if (!cityInputValue) return [];
     const searchTerm = cityInputValue.toLowerCase();
@@ -76,7 +107,6 @@ const SnowDayCalculator = () => {
     return suggestions;
   }, [instantCitySuggestions, serverCitySuggestions]);
 
-  // API Calls
   const fetchCities = useCallback(async (searchTerm) => {
     if (!searchTerm || searchTerm.length < 3) return;
     setLoadingCities(true);
@@ -232,206 +262,270 @@ const SnowDayCalculator = () => {
   };
 
   return (
-    <Box sx={{ 
-      height: 'calc(100vh - 64px)',
-      display: 'grid',
-      gridTemplateColumns: { xs: '1fr', md: '400px 1fr' },
-      gap: 2,
-      p: 2,
-      overflow: 'hidden'
-    }}>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
       <Helmet>
-        <title>Snow Day Calculator - Calculator Hub</title>
-        <meta name="description" content="Calculate the probability of a snow day based on weather conditions" />
+        <title>Snow Day Predictor - Calculator Hub</title>
+        <meta name="description" content="Calculate the probability of a snow day based on weather conditions in your city." />
       </Helmet>
 
-      {/* Search Panel */}
-      <Paper sx={{ 
-        p: 3,
-        height: '100%',
-        overflow: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 2
+      <Box sx={{ 
+        textAlign: { xs: 'center', md: 'left' },
+        mb: 4 
       }}>
-        <Typography variant="h5" gutterBottom>
-          ❄️ Snow Day Predictor
-        </Typography>
-
-        <FormControl fullWidth>
-          <InputLabel>Country</InputLabel>
-          <Select
-            value={selectedCountry}
-            label="Country"
-            onChange={handleCountryChange}
-          >
-            {COUNTRIES.map(country => (
-              <MenuItem key={country.code} value={country.code}>
-                {country.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <Tabs
-          value={searchType}
-          onChange={handleSearchTypeChange}
-          centered
+        <Typography 
+          variant="h4" 
+          component="h1" 
+          gutterBottom
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: { xs: 'center', md: 'flex-start' },
+            gap: 2,
+            fontSize: { xs: '1.75rem', md: '2.125rem' }
+          }}
         >
-          <Tab label="Search by ZIP" value="zip" />
-          <Tab label="Search by City" value="city" />
-        </Tabs>
+          <AcUnitIcon sx={{ fontSize: 'inherit' }} /> Snow Day Predictor
+        </Typography>
+        <Typography 
+          variant="subtitle1" 
+          color="text.secondary"
+          sx={{ maxWidth: '600px', mx: { xs: 'auto', md: 0 } }}
+        >
+          Enter your city name to calculate the probability of a snow day based on current weather conditions.
+        </Typography>
+      </Box>
 
-        <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          {searchType === 'zip' ? (
-            <TextField
-              fullWidth
-              label="ZIP Code"
-              value={zipCode}
-              onChange={(e) => setZipCode(e.target.value)}
-              error={!!error}
-              helperText={error || ''}
-              inputProps={{ maxLength: 5 }}
-            />
-          ) : (
-            <Autocomplete
-              fullWidth
-              freeSolo
-              options={combinedSuggestions}
-              getOptionLabel={(option) => typeof option === 'string' ? option : option.displayName}
-              loading={loadingCities}
-              inputValue={cityInputValue}
-              onInputChange={(_, value) => {
-                setCityInputValue(value || '');
-                setError(''); // Clear error when user types
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <Paper 
+            elevation={3} 
+            sx={{ 
+              p: { xs: 2, sm: 3 },
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column'
+            }}
+          >
+            <Box
+              component="form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit();
               }}
-              onChange={handleCitySelect}
-              renderOption={(props, option) => (
-                <Box component="li" {...props}>
-                  <Box>
-                    <Typography>{option.displayName || option.name}</Typography>
-                    {option.instant && (
-                      <Typography variant="caption" color="text.secondary">
-                        Instant Suggestion
-                      </Typography>
-                    )}
-                  </Box>
-                </Box>
-              )}
-              renderInput={(params) => (
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 3
+              }}
+            >
+              <FormControl fullWidth>
+                <InputLabel>Country</InputLabel>
+                <Select
+                  value={selectedCountry}
+                  label="Country"
+                  onChange={handleCountryChange}
+                >
+                  {COUNTRIES.map(country => (
+                    <MenuItem key={country.code} value={country.code}>
+                      {country.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <Tabs
+                value={searchType}
+                onChange={handleSearchTypeChange}
+                centered
+              >
+                <Tab label="Search by ZIP" value="zip" />
+                <Tab label="Search by City" value="city" />
+              </Tabs>
+
+              {searchType === 'zip' ? (
                 <TextField
-                  {...params}
-                  label="Enter city name"
+                  fullWidth
+                  label="ZIP Code"
+                  value={zipCode}
+                  onChange={(e) => setZipCode(e.target.value)}
+                  disabled={loading}
                   error={!!error}
-                  helperText={error || ''}
-                  InputProps={{
-                    ...params.InputProps,
-                    endAdornment: (
-                      <>
-                        {loadingCities && <CircularProgress size={20} />}
-                        {params.InputProps.endAdornment}
-                      </>
-                    ),
+                  helperText={error || 'Enter your ZIP code'}
+                  sx={{ mb: 2 }}
+                />
+              ) : (
+                <Autocomplete
+                  fullWidth
+                  freeSolo
+                  options={combinedSuggestions}
+                  getOptionLabel={(option) => typeof option === 'string' ? option : option.displayName}
+                  loading={loadingCities}
+                  inputValue={cityInputValue}
+                  onInputChange={(_, value) => {
+                    setCityInputValue(value || '');
+                    setError(''); // Clear error when user types
                   }}
+                  onChange={handleCitySelect}
+                  renderOption={(props, option) => (
+                    <Box component="li" {...props}>
+                      <Box>
+                        <Typography>{option.displayName || option.name}</Typography>
+                        {option.instant && (
+                          <Typography variant="caption" color="text.secondary">
+                            Instant Suggestion
+                          </Typography>
+                        )}
+                      </Box>
+                    </Box>
+                  )}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Enter city name"
+                      disabled={loading}
+                      error={!!error}
+                      helperText={error || 'Enter your city name (e.g., Boston, MA)'}
+                      InputProps={{
+                        ...params.InputProps,
+                        endAdornment: (
+                          <>
+                            {loadingCities && <CircularProgress size={20} />}
+                            {params.InputProps.endAdornment}
+                          </>
+                        ),
+                      }}
+                    />
+                  )}
                 />
               )}
-            />
-          )}
 
-          <Button
-            variant="contained"
-            type="submit"
-            disabled={loading || (searchType === 'city' && !cityInputValue) || (searchType === 'zip' && !zipCode)}
-            fullWidth
-          >
-            {loading ? <CircularProgress size={24} /> : 'Check Snow Day Probability'}
-          </Button>
-        </Box>
-      </Paper>
+              <Box sx={{ flexGrow: 1 }} />
 
-      {/* Results Panel */}
-      <Paper sx={{ 
-        p: 3,
-        height: '100%',
-        overflow: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: prediction === null ? 'center' : 'flex-start'
-      }}>
-        {prediction === null ? (
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="h6" color="text.secondary" gutterBottom>
-              Enter a location to check snow day probability
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              We'll analyze weather conditions and historical patterns
-            </Typography>
-          </Box>
-        ) : weatherData && (
-          <>
-            <Typography variant="h2" sx={{ 
-              fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4rem' },
-              fontWeight: 'bold',
-              color: prediction > 70 ? 'success.main' : 'primary.main'
-            }}>
-              {prediction}%
-            </Typography>
-
-            <Typography variant="h5" sx={{ mb: 3, textAlign: 'center' }}>
-              {prediction > 90 ? '🎉 Almost Certain Snow Day!' :
-               prediction > 70 ? '🌨️ Very Likely Snow Day!' :
-               prediction > 50 ? '❄️ Decent Chance!' :
-               prediction > 30 ? '🌥️ Small Chance...' :
-               '☀️ Probably Not Today'}
-            </Typography>
-
-            <Box sx={{ 
-              display: 'grid',
-              gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
-              gap: 2,
-              width: '100%'
-            }}>
-              {[
-                { label: '📍 Location', value: weatherData.city.name },
-                { label: '🌡️ Temperature', value: `${Math.round(weatherData.list[0].main.temp_min)}°F to ${Math.round(weatherData.list[0].main.temp_max)}°F` },
-                { label: '🌥️ Conditions', value: weatherData.list[0].weather[0].description, capitalize: true },
-                { label: '💨 Wind Speed', value: `${Math.round(weatherData.list[0].wind.speed)} mph` }
-              ].map(({ label, value, capitalize }) => (
-                <Paper key={label} sx={{ p: 2, bgcolor: 'background.default' }}>
-                  <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 'bold' }}>
-                    {label}
-                  </Typography>
-                  <Typography sx={{ textTransform: capitalize ? 'capitalize' : 'none' }}>
-                    {value}
-                  </Typography>
-                </Paper>
-              ))}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit}
+                disabled={!cityName && !zipCode || loading}
+                size="large"
+                sx={{
+                  py: 1.5,
+                  fontSize: '1.1rem',
+                  position: 'relative'
+                }}
+              >
+                {loading ? (
+                  <CircularProgress
+                    size={24}
+                    sx={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      marginTop: '-12px',
+                      marginLeft: '-12px',
+                    }}
+                  />
+                ) : (
+                  'Calculate Probability'
+                )}
+              </Button>
             </Box>
+          </Paper>
+        </Grid>
 
-            {prediction > 70 && (
-              <Box sx={{ mt: 3 }}>
-                <Typography variant="h6" sx={{ color: 'success.main' }}>
-                  🎊 Time to prepare your snow day activities! 🎊
+        <Grid item xs={12} md={6}>
+          <Paper 
+            elevation={3} 
+            sx={{ 
+              p: { xs: 2, sm: 3 },
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              opacity: prediction !== null ? 1 : 0.5,
+              transition: 'opacity 0.3s ease'
+            }}
+          >
+            {!prediction && !loading && (
+              <Box 
+                sx={{ 
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '100%',
+                  textAlign: 'center',
+                  color: 'text.secondary'
+                }}
+              >
+                <Typography variant="h6">
+                  Enter a city name to see the snow day prediction
                 </Typography>
               </Box>
             )}
 
-            <Button
-              variant="outlined"
-              onClick={handleShare}
-              startIcon={<Icon>{shareSuccess ? 'check_circle' : 'share'}</Icon>}
-              sx={{
-                mt: 3,
-                borderColor: shareSuccess ? 'success.main' : 'inherit',
-                color: shareSuccess ? 'success.main' : 'inherit',
-              }}
-            >
-              {shareSuccess ? 'Copied!' : 'Share Result'}
-            </Button>
-          </>
-        )}
-      </Paper>
+            {prediction !== null && (
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography 
+                  variant="h5" 
+                  gutterBottom
+                  sx={{ 
+                    color: theme.palette.primary.main,
+                    fontWeight: 'bold',
+                    mb: 3
+                  }}
+                >
+                  Snow Day Prediction
+                </Typography>
+
+                <Box 
+                  sx={{ 
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: 2
+                  }}
+                >
+                  <Typography variant="h3" component="div" sx={{ fontWeight: 'bold' }}>
+                    {prediction}%
+                  </Typography>
+                  
+                  <Typography 
+                    variant="h6" 
+                    sx={{ 
+                      color: 'text.secondary',
+                      maxWidth: '400px',
+                      mx: 'auto'
+                    }}
+                  >
+                    {weatherData.list[0].weather[0].description}
+                  </Typography>
+
+                  <Box sx={{ mt: 3, width: '100%' }}>
+                    <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                      Current Weather Conditions:
+                    </Typography>
+                    <Grid container spacing={2} sx={{ mt: 1 }}>
+                      <Grid item xs={6}>
+                        <Typography variant="body2">
+                          Temperature: {Math.round(weatherData.list[0].main.temp_min)}°F to {Math.round(weatherData.list[0].main.temp_max)}°F
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Typography variant="body2">
+                          Wind Speed: {Math.round(weatherData.list[0].wind.speed)} mph
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Typography variant="body2">
+                          Conditions: {weatherData.list[0].weather[0].description}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </Box>
+              </Box>
+            )}
+          </Paper>
+        </Grid>
+      </Grid>
 
       <Snackbar
         open={snackbarOpen}
@@ -440,7 +534,7 @@ const SnowDayCalculator = () => {
         message="Copied to clipboard"
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       />
-    </Box>
+    </Container>
   );
 };
 
