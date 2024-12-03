@@ -83,6 +83,11 @@ const ProductivityCalculator = () => {
                 onChange={handleInputChange('revenue')}
                 type="number"
                 fullWidth
+                inputProps={{
+                  inputMode: 'numeric',
+                  pattern: '[0-9]*',
+                  min: 0,
+                }}
                 InputProps={{
                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}
@@ -95,6 +100,11 @@ const ProductivityCalculator = () => {
                 onChange={handleInputChange('employees')}
                 type="number"
                 fullWidth
+                inputProps={{
+                  inputMode: 'numeric',
+                  pattern: '[0-9]*',
+                  min: 1,
+                }}
                 placeholder="Enter number of employees"
               />
 
@@ -104,6 +114,11 @@ const ProductivityCalculator = () => {
                 onChange={handleInputChange('workingHours')}
                 type="number"
                 fullWidth
+                inputProps={{
+                  inputMode: 'numeric',
+                  pattern: '[0-9]*',
+                  min: 1,
+                }}
                 InputProps={{
                   endAdornment: <InputAdornment position="end">hrs</InputAdornment>,
                 }}

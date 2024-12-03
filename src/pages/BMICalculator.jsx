@@ -165,6 +165,11 @@ const BMICalculator = () => {
                 fullWidth
                 required
                 size="small"
+                inputProps={{
+                  inputMode: 'numeric',
+                  pattern: '[0-9]*',
+                  min: 0,
+                }}
               />
 
               <TextField
@@ -176,6 +181,11 @@ const BMICalculator = () => {
                 fullWidth
                 required
                 size="small"
+                inputProps={{
+                  inputMode: 'numeric',
+                  pattern: '[0-9]*',
+                  min: 0,
+                }}
               />
 
               <Button

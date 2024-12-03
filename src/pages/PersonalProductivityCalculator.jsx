@@ -176,6 +176,12 @@ const PersonalProductivityCalculator = () => {
                 onChange={handleInputChange('dailyHours')}
                 type="number"
                 fullWidth
+                inputProps={{
+                  inputMode: 'numeric',
+                  pattern: '[0-9]*',
+                  min: 0,
+                  max: 24,
+                }}
                 InputProps={{
                   endAdornment: <InputAdornment position="end">hrs</InputAdornment>,
                 }}
@@ -188,6 +194,11 @@ const PersonalProductivityCalculator = () => {
                 onChange={handleInputChange('dailyIncome')}
                 type="number"
                 fullWidth
+                inputProps={{
+                  inputMode: 'numeric',
+                  pattern: '[0-9]*',
+                  min: 0,
+                }}
                 InputProps={{
                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}
