@@ -29,18 +29,6 @@ const Home = () => {
       </Helmet>
       
       <Box sx={{ py: { xs: 2, sm: 3 } }}>
-        <Typography 
-          variant="h1" 
-          sx={{ 
-            fontSize: { xs: '1.5rem', sm: '1.75rem' },
-            fontWeight: 600,
-            mb: { xs: 2, sm: 3 },
-            color: 'text.primary'
-          }}
-        >
-          Quick Access Tools
-        </Typography>
-
         {Object.entries(groupedTools).map(([category, categoryTools]) => (
           <Box 
             key={category} 

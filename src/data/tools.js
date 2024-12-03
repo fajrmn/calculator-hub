@@ -42,6 +42,22 @@ export const tools = [
     category: 'Productivity Tools',
     keywords: ['embed', 'youtube', 'twitter', 'instagram', 'vimeo', 'iframe', 'social media', 'video']
   },
+  {
+    name: 'Productivity Calculator',
+    description: 'Calculate revenue per employee, productivity per employee, and revenue per working hour.',
+    path: '/productivity-calculator',
+    icon: '📊',
+    category: 'Productivity Tools',
+    keywords: ['productivity', 'revenue', 'employee', 'working hours', 'efficiency', 'performance'],
+  },
+  {
+    name: 'Personal Productivity Calculator',
+    description: 'Calculate your personal productivity score and compare your earnings with national averages.',
+    path: '/personal-productivity-calculator',
+    icon: '⏱️',
+    category: 'Productivity Tools',
+    keywords: ['productivity', 'income', 'work hours', 'salary comparison', 'efficiency', 'personal'],
+  },
   
   // Education Tools
   {
@@ -69,6 +85,14 @@ export const tools = [
     icon: '🎲',
     category: 'Other Tools',
     keywords: ['vorici', 'crafting', 'chromatic', 'orb', 'socket']
+  },
+  {
+    name: 'Date Calculator',
+    description: 'Calculate days between dates or add/subtract time from dates',
+    path: '/date-calculator',
+    icon: '📅',
+    category: 'Other Tools',
+    keywords: ['date', 'calculator', 'time', 'duration', 'days between', 'add days', 'subtract days']
   }
   // Add more tools here as they become available
 ];

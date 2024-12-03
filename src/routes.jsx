@@ -3,6 +3,7 @@ import Layout from './components/Layout/Layout';
 import Home from './pages/Home';
 import SnowDayCalculator from './pages/SnowDayCalculator';
 import VoriciCalculator from './pages/VoriciCalculator';
+import DateCalculator from './pages/DateCalculator';
 
 const AppRoutes = () => {
   return (
@@ -11,6 +12,7 @@ const AppRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/snow-day-calculator" element={<SnowDayCalculator />} />
         <Route path="/vorici-calculator" element={<VoriciCalculator />} />
+        <Route path="/date-calculator" element={<DateCalculator />} />
       </Routes>
     </Layout>
   );
