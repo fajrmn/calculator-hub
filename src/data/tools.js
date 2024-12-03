@@ -68,6 +68,14 @@ export const tools = [
     category: 'Education Tools',
     keywords: ['grade', 'education', 'school', 'exam', 'course', 'gpa']
   },
+  {
+    name: 'Children\'s Education Calculator',
+    description: 'Plan and calculate savings needed for your child\'s college education',
+    path: '/education-savings-calculator',
+    icon: '💸',
+    category: 'Education Tools',
+    keywords: ['education', 'college', 'savings', 'tuition', 'university', 'school', 'planning', 'children', 'kids', 'future']
+  },
   
   // Other Tools
   {

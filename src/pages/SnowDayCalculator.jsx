@@ -28,7 +28,9 @@ import { Helmet } from 'react-helmet-async';
 import AcUnitIcon from '@mui/icons-material/AcUnit';
 import InfoSection from '../components/InfoSection';
 
+// Use import.meta.env for Vite environment variables
 const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
+
 const DEBOUNCE_DELAY = 150;
 
 const COUNTRIES = [
@@ -111,14 +113,30 @@ const SnowDayCalculator = () => {
     return suggestions;
   }, [instantCitySuggestions, serverCitySuggestions]);
 
+  // Add a function to validate API configuration
+  const validateApiConfig = () => {
+    if (!OPENWEATHER_API_KEY) {
+      throw new Error('OpenWeather API key is not configured. Please check environment variables.');
+    }
+  };
+
   const fetchCities = useCallback(async (searchTerm) => {
     if (!searchTerm || searchTerm.length < 3) return;
     setLoadingCities(true);
+    setError('');
+    
     try {
-      const response = await fetch(
-        `https://api.openweathermap.org/geo/1.0/direct?q=${searchTerm}&limit=5&appid=${OPENWEATHER_API_KEY}`
-      );
-      if (!response.ok) throw new Error('Failed to fetch cities');
+      validateApiConfig();
+      const url = new URL('https://api.openweathermap.org/geo/1.0/direct');
+      url.searchParams.append('q', searchTerm);
+      url.searchParams.append('limit', '5');
+      url.searchParams.append('appid', OPENWEATHER_API_KEY);
+
+      const response = await fetch(url);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch cities');
+      }
       const data = await response.json();
       setServerCitySuggestions(data.map(city => ({
         name: city.name,
@@ -129,7 +147,12 @@ const SnowDayCalculator = () => {
         displayName: `${city.name}${city.state ? `, ${city.state}` : ''}`
       })));
     } catch (err) {
-      console.error('Error fetching cities:', err);
+      console.error('City Search Error:', {
+        message: err.message,
+        hasApiKey: !!OPENWEATHER_API_KEY
+      });
+      setError(`Search Error: ${err.message}`);
+      setServerCitySuggestions([]);
     } finally {
       setLoadingCities(false);
     }
@@ -143,6 +166,13 @@ const SnowDayCalculator = () => {
     }, DEBOUNCE_DELAY);
     return () => clearTimeout(timer);
   }, [cityInputValue, fetchCities, instantCitySuggestions.length]);
+
+  useEffect(() => {
+    // Log environment variable status (only in development)
+    if (import.meta.env.DEV) {
+      console.log('API Key Status:', OPENWEATHER_API_KEY ? 'Present' : 'Missing');
+    }
+  }, []);
 
   const calculateSnowDayProbability = useCallback((weatherData) => {
     const temp = weatherData.list[0].main.temp;
@@ -174,26 +204,34 @@ const SnowDayCalculator = () => {
     if (event) event.preventDefault();
     setError('');
     setLoading(true);
+    setWeatherData(null);
+    setPrediction(null);
 
     try {
-      if (!OPENWEATHER_API_KEY) {
-        throw new Error('OpenWeather API key is not configured');
-      }
-
+      validateApiConfig();
       let coords;
+
       if (searchType === 'zip') {
-        const response = await fetch(
-          `https://api.openweathermap.org/geo/1.0/zip?zip=${zipCode},${selectedCountry}&appid=${OPENWEATHER_API_KEY}`
-        );
-        if (!response.ok) throw new Error('Invalid ZIP code');
+        const zipUrl = new URL('https://api.openweathermap.org/geo/1.0/zip');
+        zipUrl.searchParams.append('zip', `${zipCode},${selectedCountry}`);
+        zipUrl.searchParams.append('appid', OPENWEATHER_API_KEY);
+
+        const response = await fetch(zipUrl);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Invalid ZIP code');
+        }
         coords = await response.json();
       } else {
         const searchQuery = cityName || cityInputValue;
         if (!searchQuery) throw new Error('Please enter a city name');
         
-        const response = await fetch(
-          `https://api.openweathermap.org/geo/1.0/direct?q=${searchQuery},${selectedCountry}&limit=1&appid=${OPENWEATHER_API_KEY}`
-        );
+        const cityUrl = new URL('https://api.openweathermap.org/geo/1.0/direct');
+        cityUrl.searchParams.append('q', `${searchQuery},${selectedCountry}`);
+        cityUrl.searchParams.append('limit', '1');
+        cityUrl.searchParams.append('appid', OPENWEATHER_API_KEY);
+
+        const response = await fetch(cityUrl);
         const data = await response.json();
         if (!response.ok || !data.length) {
           throw new Error(`City "${searchQuery}" not found. Please try another city name.`);
@@ -201,20 +239,29 @@ const SnowDayCalculator = () => {
         coords = data[0];
       }
 
-      const weatherResponse = await fetch(
-        `https://api.openweathermap.org/data/2.5/forecast?lat=${coords.lat}&lon=${coords.lon}&appid=${OPENWEATHER_API_KEY}&units=imperial`
-      );
-      if (!weatherResponse.ok) throw new Error('Failed to fetch weather data');
+      const weatherUrl = new URL('https://api.openweathermap.org/data/2.5/forecast');
+      weatherUrl.searchParams.append('lat', coords.lat);
+      weatherUrl.searchParams.append('lon', coords.lon);
+      weatherUrl.searchParams.append('appid', OPENWEATHER_API_KEY);
+      weatherUrl.searchParams.append('units', 'imperial');
+
+      const weatherResponse = await fetch(weatherUrl);
+      if (!weatherResponse.ok) {
+        const errorData = await weatherResponse.json();
+        throw new Error(errorData.message || 'Failed to fetch weather data');
+      }
       const weatherData = await weatherResponse.json();
       
       setWeatherData(weatherData);
       setPrediction(calculateSnowDayProbability(weatherData));
-      setError(''); // Clear any existing error when successful
     } catch (err) {
-      console.error('Error:', err);
-      setError(err.message);
-      setWeatherData(null);
-      setPrediction(null);
+      console.error('Weather Data Error:', {
+        message: err.message,
+        hasApiKey: !!OPENWEATHER_API_KEY,
+        searchType,
+        selectedCountry
+      });
+      setError(`Error: ${err.message}`);
     } finally {
       setLoading(false);
     }
