@@ -160,7 +160,7 @@ const EmbedGenerator = () => {
                 height: '100%'
               }}
             >
-              <FormControl>
+              <FormControl fullWidth sx={{ mb: 2 }}>
                 <InputLabel>Embed Type</InputLabel>
                 <Select
                   value={embedType}
@@ -178,37 +178,27 @@ const EmbedGenerator = () => {
                 label="URL"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
+                margin="normal"
                 error={!!error}
                 helperText={error || 'Enter the URL of the content you want to embed'}
-                sx={{ mt: 1 }}
               />
 
               {embedType !== 'twitter' && embedType !== 'instagram' && (
-                <Box 
-                  sx={{ 
-                    display: 'grid',
-                    gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
-                    gap: 2
-                  }}
-                >
+                <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
                   <TextField
                     label="Width"
                     type="number"
                     value={width}
                     onChange={(e) => setWidth(e.target.value)}
-                    fullWidth
                   />
                   <TextField
                     label="Height"
                     type="number"
                     value={height}
                     onChange={(e) => setHeight(e.target.value)}
-                    fullWidth
                   />
                 </Box>
               )}
-
-              <Box sx={{ flexGrow: 1 }} />
 
               <Button
                 variant="contained"
@@ -217,13 +207,16 @@ const EmbedGenerator = () => {
                 fullWidth
                 size="large"
                 sx={{ 
-                  mt: 2,
                   py: 1.5,
-                  fontSize: '1.1rem'
+                  fontSize: '1.1rem',
+                  mt: embedType === 'twitter' || embedType === 'instagram' ? 2 : 0
                 }}
               >
                 Generate Embed Code
               </Button>
+
+              <Box sx={{ flexGrow: 1 }} />
+
             </Box>
           </Paper>
         </Grid>
