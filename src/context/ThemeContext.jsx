@@ -25,11 +25,57 @@ export const ThemeProvider = ({ children }) => {
     palette: {
       mode: isDarkMode ? 'dark' : 'light',
       primary: {
-        main: '#ffffff',
+        main: isDarkMode ? '#ffffff' : '#1976d2',
+        light: isDarkMode ? '#f5f5f5' : '#42a5f5',
+        dark: isDarkMode ? '#c2c2c2' : '#1565c0',
+        contrastText: isDarkMode ? '#000000' : '#ffffff',
+      },
+      secondary: {
+        main: isDarkMode ? '#f50057' : '#dc004e',
+        light: isDarkMode ? '#f73378' : '#ff4081',
+        dark: isDarkMode ? '#ab003c' : '#9a0036',
+        contrastText: '#ffffff',
+      },
+      text: {
+        primary: isDarkMode ? '#ffffff' : '#2c3e50',
+        secondary: isDarkMode ? '#b3b3b3' : '#546e7a',
       },
       background: {
-        default: isDarkMode ? '#121212' : '#ffffff',
+        default: isDarkMode ? '#121212' : '#f5f7fa',
         paper: isDarkMode ? '#1e1e1e' : '#ffffff',
+      },
+      divider: isDarkMode ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.12)',
+    },
+    typography: {
+      h1: {
+        color: isDarkMode ? '#ffffff' : '#2c3e50',
+      },
+      h2: {
+        color: isDarkMode ? '#ffffff' : '#2c3e50',
+      },
+      h3: {
+        color: isDarkMode ? '#ffffff' : '#2c3e50',
+      },
+      h4: {
+        color: isDarkMode ? '#ffffff' : '#2c3e50',
+      },
+      h5: {
+        color: isDarkMode ? '#ffffff' : '#2c3e50',
+      },
+      h6: {
+        color: isDarkMode ? '#ffffff' : '#2c3e50',
+      },
+      subtitle1: {
+        color: isDarkMode ? '#b3b3b3' : '#546e7a',
+      },
+      subtitle2: {
+        color: isDarkMode ? '#b3b3b3' : '#546e7a',
+      },
+      body1: {
+        color: isDarkMode ? '#ffffff' : '#2c3e50',
+      },
+      body2: {
+        color: isDarkMode ? '#b3b3b3' : '#546e7a',
       },
     },
     components: {
@@ -37,7 +83,28 @@ export const ThemeProvider = ({ children }) => {
         styleOverrides: {
           root: {
             backgroundColor: isDarkMode ? '#1e1e1e' : '#ffffff',
-            color: isDarkMode ? '#ffffff' : '#000000',
+            color: isDarkMode ? '#ffffff' : '#2c3e50',
+          },
+        },
+      },
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            textTransform: 'none',
+          },
+          contained: {
+            boxShadow: 'none',
+            '&:hover': {
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+            },
+          },
+        },
+      },
+      MuiCard: {
+        styleOverrides: {
+          root: {
+            backgroundColor: isDarkMode ? '#1e1e1e' : '#ffffff',
+            borderRadius: '12px',
           },
         },
       },
@@ -53,3 +120,5 @@ export const ThemeProvider = ({ children }) => {
     </ThemeContext.Provider>
   );
 };
+
+export default ThemeContext;

@@ -1,188 +1,326 @@
 import { useState } from 'react';
-import { Typography, Paper, TextField, Button, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Button,
+  Paper,
+  Grid,
+  useTheme,
+  useMediaQuery,
+  Divider,
+  FormControl,
+  FormLabel,
+  Select,
+  MenuItem,
+  Alert,
+  AlertTitle,
+} from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 
 const VoriciCalculator = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
   const [formData, setFormData] = useState({
-    requiredColors: {
-      red: 0,
-      green: 0,
-      blue: 0
-    },
-    itemLevel: 1,
-    totalSockets: 4,
+    desiredRed: '0',
+    desiredGreen: '0',
+    desiredBlue: '0',
+    currentSockets: '3',
   });
 
-  const [results, setResults] = useState(null);
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
 
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name.includes('.')) {
-      const [parent, child] = name.split('.');
-      setFormData(prev => ({
-        ...prev,
-        [parent]: {
-          ...prev[parent],
-          [child]: parseInt(value) || 0
-        }
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: parseInt(value) || 0
-      }));
-    }
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    // Clear error when user makes changes
+    setError(null);
   };
 
-  const calculateProbabilities = () => {
-    // Vorici crafting calculation logic
-    const { requiredColors, totalSockets } = formData;
-    const totalRequired = Object.values(requiredColors).reduce((a, b) => a + b, 0);
-    
-    if (totalRequired > totalSockets) {
+  const validateInput = () => {
+    const red = parseInt(formData.desiredRed);
+    const green = parseInt(formData.desiredGreen);
+    const blue = parseInt(formData.desiredBlue);
+    const totalSockets = parseInt(formData.currentSockets);
+    const totalDesired = red + green + blue;
+
+    if (isNaN(red) || isNaN(green) || isNaN(blue)) {
+      return {
+        isValid: false,
+        error: 'All socket values must be valid numbers'
+      };
+    }
+
+    if (red < 0 || green < 0 || blue < 0) {
+      return {
+        isValid: false,
+        error: 'Socket values cannot be negative'
+      };
+    }
+
+    if (totalDesired > totalSockets) {
+      return {
+        isValid: false,
+        error: `Total desired sockets (${totalDesired}) exceeds available sockets (${totalSockets})`,
+        details: {
+          red: `Red: ${red}`,
+          green: `Green: ${green}`,
+          blue: `Blue: ${blue}`,
+          total: `Total: ${totalDesired}/${totalSockets}`
+        }
+      };
+    }
+
+    if (totalDesired === 0) {
+      return {
+        isValid: false,
+        error: 'At least one socket color must be specified'
+      };
+    }
+
+    return { isValid: true };
+  };
+
+  const calculateChromatics = () => {
+    const validation = validateInput();
+    if (!validation.isValid) {
+      setError(validation);
+      setResult(null);
       return;
     }
 
-    // Calculate average attempts and costs
-    const baseChance = 0.25; // Simplified probability
-    const chromaticCost = 1; // Cost in chaos orbs
+    const red = parseInt(formData.desiredRed);
+    const green = parseInt(formData.desiredGreen);
+    const blue = parseInt(formData.desiredBlue);
+    const totalSockets = parseInt(formData.currentSockets);
+
+    try {
+      const probability = calculateProbability(red, green, blue, totalSockets);
+      const attempts = Math.ceil(1 / probability);
+      const chromatics = attempts * 4; // 4 chromatics per attempt
+
+      setResult({
+        probability: (probability * 100).toFixed(2),
+        attempts: attempts,
+        chromatics: chromatics,
+        offColors: totalSockets - (red + green + blue)
+      });
+      setError(null);
+    } catch (err) {
+      setError({
+        isValid: false,
+        error: 'Calculation error occurred',
+        details: { message: err.message }
+      });
+      setResult(null);
+    }
+  };
+
+  const calculateProbability = (red, green, blue, total) => {
+    if (red + green + blue > total) return 0;
     
-    const averageAttempts = Math.ceil(1 / baseChance);
-    const estimatedCost = averageAttempts * chromaticCost;
+    let probability = 1;
+    let remaining = total;
     
-    setResults({
-      averageAttempts,
-      estimatedCost,
-      successRate: (baseChance * 100).toFixed(2),
-      recommendedMethod: totalRequired > 3 ? 'Crafting Bench' : 'Chromatic Orbs'
-    });
+    if (red > 0) {
+      probability *= choose(remaining, red) * Math.pow(0.34, red);
+      remaining -= red;
+    }
+    
+    if (green > 0) {
+      probability *= choose(remaining, green) * Math.pow(0.33, green);
+      remaining -= green;
+    }
+    
+    if (blue > 0) {
+      probability *= choose(remaining, blue) * Math.pow(0.33, blue);
+      remaining -= blue;
+    }
+    
+    return probability;
+  };
+
+  const choose = (n, k) => {
+    if (k > n) return 0;
+    if (k === 0) return 1;
+    return (n * choose(n - 1, k - 1)) / k;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    calculateChromatics();
   };
 
   return (
-    <>
+    <Container maxWidth="lg" sx={{ py: { xs: 2, sm: 3 } }}>
       <Helmet>
-        <title>Vorici Calculator | Chromatic Orb Crafting - Calculator Hub</title>
-        <meta name="description" content="Calculate the probability of crafting specific socket colors on Path of Exile items using the Vorici Calculator. Enhance your crafting strategy with accurate insights!" />
-        <meta name="keywords" content="vorici calculator, chromatic orb calculator, path of exile crafting, socket color calculator, PoE tools, crafting probability" />
-        <meta property="og:title" content="Vorici Calculator | Chromatic Orb Crafting" />
-        <meta property="og:description" content="Optimize your Path of Exile crafting with the Vorici Calculator. Calculate socket color probabilities and enhance your gameplay strategy." />
-        <meta property="og:type" content="website" />
-        <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://calculator-hub.netlify.app/vorici-calculator" />
-        <meta name="author" content="Calculator Hub" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Vorici Calculator - Calculate Chromatic Orb Crafting Costs</title>
+        <meta name="description" content="Calculate the optimal number of chromatic orbs needed for desired socket colors in Path of Exile using the Vorici method." />
       </Helmet>
 
-      <Typography variant="h4" component="h1" gutterBottom>
+      <Typography variant="h1" sx={{ fontSize: { xs: '1.5rem', sm: '2rem' }, mb: 3, fontWeight: 600 }}>
         Vorici Calculator
       </Typography>
 
-      <Typography variant="body1" paragraph>
-        Calculate the most efficient method to obtain your desired socket colors using Chromatic Orbs or Vorici crafting bench methods.
-      </Typography>
+      <Grid container spacing={3}>
+        {/* Left Column - Input Form */}
+        <Grid item xs={12} md={6}>
+          <Paper elevation={0} sx={{ p: 3, height: '100%', bgcolor: 'background.paper' }}>
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              Socket Configuration
+            </Typography>
+            <Divider sx={{ mb: 3 }} />
+            
+            {error && (
+              <Alert 
+                severity="error" 
+                sx={{ mb: 3 }}
+              >
+                <AlertTitle>Error</AlertTitle>
+                {error.error}
+                {error.details && (
+                  <Box sx={{ mt: 1, pl: 1 }}>
+                    {Object.entries(error.details).map(([key, value]) => (
+                      <Typography key={key} variant="body2" sx={{ mt: 0.5 }}>
+                        {value}
+                      </Typography>
+                    ))}
+                  </Box>
+                )}
+              </Alert>
+            )}
+            
+            <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+              <FormControl fullWidth>
+                <FormLabel sx={{ mb: 1 }}>Total Sockets</FormLabel>
+                <Select
+                  name="currentSockets"
+                  value={formData.currentSockets}
+                  onChange={handleInputChange}
+                  size="small"
+                >
+                  {[1, 2, 3, 4, 5, 6].map((num) => (
+                    <MenuItem key={num} value={num}>{num}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
-      <Paper sx={{ p: 3, mt: 3 }}>
-        <Box component="form" noValidate autoComplete="off">
-          <Typography variant="h6" gutterBottom>
-            Required Colors
-          </Typography>
-          
-          <TextField
-            label="Red Sockets"
-            name="requiredColors.red"
-            type="number"
-            value={formData.requiredColors.red}
-            onChange={handleChange}
-            margin="normal"
-            sx={{ mr: 2 }}
-          />
-          <TextField
-            label="Green Sockets"
-            name="requiredColors.green"
-            type="number"
-            value={formData.requiredColors.green}
-            onChange={handleChange}
-            margin="normal"
-            sx={{ mr: 2 }}
-          />
-          <TextField
-            label="Blue Sockets"
-            name="requiredColors.blue"
-            type="number"
-            value={formData.requiredColors.blue}
-            onChange={handleChange}
-            margin="normal"
-          />
+              <TextField
+                label="Desired Red Sockets"
+                type="number"
+                name="desiredRed"
+                value={formData.desiredRed}
+                onChange={handleInputChange}
+                fullWidth
+                required
+                size="small"
+                inputProps={{ min: 0, max: formData.currentSockets }}
+                error={error && error.details?.red}
+              />
 
-          <TextField
-            fullWidth
-            label="Total Sockets"
-            name="totalSockets"
-            type="number"
-            value={formData.totalSockets}
-            onChange={handleChange}
-            margin="normal"
-          />
+              <TextField
+                label="Desired Green Sockets"
+                type="number"
+                name="desiredGreen"
+                value={formData.desiredGreen}
+                onChange={handleInputChange}
+                fullWidth
+                required
+                size="small"
+                inputProps={{ min: 0, max: formData.currentSockets }}
+                error={error && error.details?.green}
+              />
 
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={calculateProbabilities}
-            sx={{ mt: 2 }}
-            fullWidth
-          >
-            Calculate
-          </Button>
-        </Box>
+              <TextField
+                label="Desired Blue Sockets"
+                type="number"
+                name="desiredBlue"
+                value={formData.desiredBlue}
+                onChange={handleInputChange}
+                fullWidth
+                required
+                size="small"
+                inputProps={{ min: 0, max: formData.currentSockets }}
+                error={error && error.details?.blue}
+              />
 
-        {results && (
-          <TableContainer component={Paper} sx={{ mt: 3 }}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Metric</TableCell>
-                  <TableCell align="right">Value</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow>
-                  <TableCell>Average Attempts</TableCell>
-                  <TableCell align="right">{results.averageAttempts}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>Estimated Cost (Chaos)</TableCell>
-                  <TableCell align="right">{results.estimatedCost}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>Success Rate</TableCell>
-                  <TableCell align="right">{results.successRate}%</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>Recommended Method</TableCell>
-                  <TableCell align="right">{results.recommendedMethod}</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-      </Paper>
+              <Button
+                type="submit"
+                variant="contained"
+                size="large"
+                sx={{ mt: 2 }}
+              >
+                Calculate Cost
+              </Button>
+            </Box>
+          </Paper>
+        </Grid>
 
-      <Typography variant="h5" component="h2" sx={{ mt: 4, mb: 2 }}>
-        About Vorici Calculations
-      </Typography>
-      
-      <Typography variant="body1" paragraph>
-        The Vorici Calculator helps Path of Exile players determine the most efficient way to obtain their desired socket colors. 
-        It considers:
-      </Typography>
-      
-      <Typography component="ul" sx={{ pl: 3 }}>
-        <li>The probability of hitting specific color combinations</li>
-        <li>The average cost in Chromatic Orbs</li>
-        <li>Alternative crafting bench methods</li>
-        <li>Item level and attribute requirements</li>
-      </Typography>
-    </>
+        {/* Right Column - Results */}
+        <Grid item xs={12} md={6}>
+          <Paper elevation={0} sx={{ p: 3, height: '100%', bgcolor: 'background.paper' }}>
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              Crafting Results
+            </Typography>
+            <Divider sx={{ mb: 3 }} />
+
+            {result ? (
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <Box>
+                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                    Success Probability
+                  </Typography>
+                  <Typography variant="h4" color="primary" gutterBottom>
+                    {result.probability}%
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Chance of getting desired colors in one attempt
+                  </Typography>
+                </Box>
+
+                <Box>
+                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                    Expected Cost
+                  </Typography>
+                  <Typography variant="h4" color="primary" gutterBottom>
+                    {result.chromatics}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Chromatic Orbs needed (average)
+                  </Typography>
+                </Box>
+
+                <Box>
+                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                    Crafting Details
+                  </Typography>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 1 }}>
+                    <Typography variant="body2">Expected Attempts: {result.attempts}</Typography>
+                    <Typography variant="body2">Off-Color Sockets: {result.offColors}</Typography>
+                  </Box>
+                </Box>
+
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+                  Note: These are average values. Actual results may vary due to RNG.
+                </Typography>
+              </Box>
+            ) : (
+              <Box sx={{ textAlign: 'center', py: 8, color: 'text.secondary' }}>
+                <Typography variant="body1">
+                  Enter your desired socket colors to calculate crafting costs
+                </Typography>
+              </Box>
+            )}
+          </Paper>
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 

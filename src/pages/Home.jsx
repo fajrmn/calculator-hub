@@ -1,62 +1,128 @@
-import { Typography, Grid, Card, CardContent, CardActions, Button } from '@mui/material';
+import { Typography, Grid, Card, CardActionArea, Box, Container, useTheme } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import SearchTools from '../components/SearchTools';
 import { tools } from '../data/tools';
 
 const Home = () => {
+  const theme = useTheme();
+
+  // Group tools by category
+  const groupedTools = tools.reduce((acc, tool) => {
+    if (!acc[tool.category]) {
+      acc[tool.category] = [];
+    }
+    acc[tool.category].push(tool);
+    return acc;
+  }, {});
+
   return (
-    <>
+    <Container maxWidth="lg">
       <Helmet>
-        <title>Calculator Hub - Your Ultimate Destination for Free Online Calculators and Tools</title>
-        <meta name="description" content="Explore our vast collection of free online calculators and tools, covering various categories such as finance, health, education, and more. Discover the perfect tool for your needs, with easy-to-use interfaces and mobile-friendly designs." />
-        <meta name="keywords" content="online calculators, free tools, calculator hub, web tools, finance calculators, health calculators, education calculators, snow day predictor, vorici calculator, embed generator, unit converters, math calculators" />
-        <meta property="og:title" content="Calculator Hub - Your Ultimate Destination for Free Online Calculators and Tools" />
-        <meta property="og:description" content="Unlock a world of free online calculators and tools, designed to simplify complex calculations and provide accurate results. Browse our extensive collection today!" />
+        <title>Calculator Hub - Quick Access to Online Calculators and Tools</title>
+        <meta name="description" content="Fast access to online calculators and tools. Simple, efficient, and free to use." />
+        <meta name="keywords" content="calculators, online tools, quick calculator, free tools" />
+        <meta property="og:title" content="Calculator Hub - Quick Access to Online Calculators and Tools" />
+        <meta property="og:description" content="Fast access to online calculators and tools. Simple, efficient, and free to use." />
         <meta property="og:type" content="website" />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://calculator-hub.netlify.app/" />
       </Helmet>
       
-      <Typography variant="h3" component="h1" gutterBottom>
-        Welcome to Calculator Hub
-      </Typography>
-      
-      <SearchTools />
-      
-      <Typography variant="h6" component="h2" gutterBottom color="textSecondary" sx={{ mt: 4 }}>
-        All Tools:
-      </Typography>
+      <Box sx={{ py: { xs: 2, sm: 3 } }}>
+        <Typography 
+          variant="h1" 
+          sx={{ 
+            fontSize: { xs: '1.5rem', sm: '1.75rem' },
+            fontWeight: 600,
+            mb: { xs: 2, sm: 3 },
+            color: 'text.primary'
+          }}
+        >
+          Quick Access Tools
+        </Typography>
 
-      <Grid container spacing={3} sx={{ mt: 2 }}>
-        {tools.map((tool) => (
-          <Grid item xs={12} sm={6} md={4} key={tool.path}>
-            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-              <CardContent sx={{ flexGrow: 1 }}>
-                <Typography variant="h5" component="h2" gutterBottom>
-                  {tool.name}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  {tool.description}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button 
-                  component={RouterLink} 
-                  to={tool.path} 
-                  size="large" 
-                  color="primary" 
-                  variant="contained"
-                  sx={{ width: '100%' }}
-                >
-                  Open Calculator
-                </Button>
-              </CardActions>
-            </Card>
-          </Grid>
+        {Object.entries(groupedTools).map(([category, categoryTools]) => (
+          <Box 
+            key={category} 
+            sx={{ mb: 3 }}
+          >
+            <Typography 
+              variant="h2" 
+              sx={{ 
+                fontSize: { xs: '1.1rem', sm: '1.2rem' },
+                fontWeight: 500,
+                color: 'text.secondary',
+                mb: 1.5
+              }}
+            >
+              {category}
+            </Typography>
+
+            <Grid container spacing={2}>
+              {categoryTools.map((tool) => (
+                <Grid item xs={6} sm={4} md={3} key={tool.path}>
+                  <Card 
+                    sx={{ 
+                      height: '100%',
+                      transition: 'transform 0.2s',
+                      '&:hover': {
+                        transform: 'translateY(-4px)'
+                      }
+                    }}
+                  >
+                    <CardActionArea
+                      component={RouterLink}
+                      to={tool.path}
+                      sx={{ 
+                        height: '100%',
+                        p: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start'
+                      }}
+                    >
+                      <Box 
+                        sx={{ 
+                          fontSize: { xs: '1.5rem', sm: '1.75rem' },
+                          mb: 1,
+                          lineHeight: 1
+                        }}
+                      >
+                        {tool.icon}
+                      </Box>
+                      <Typography 
+                        variant="h3"
+                        sx={{ 
+                          fontSize: { xs: '0.9rem', sm: '1rem' },
+                          fontWeight: 500,
+                          color: 'text.primary',
+                          mb: 0.5
+                        }}
+                      >
+                        {tool.name}
+                      </Typography>
+                      <Typography 
+                        variant="body2"
+                        sx={{ 
+                          fontSize: { xs: '0.75rem', sm: '0.8rem' },
+                          color: 'text.secondary',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden'
+                        }}
+                      >
+                        {tool.description}
+                      </Typography>
+                    </CardActionArea>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
         ))}
-      </Grid>
-    </>
+      </Box>
+    </Container>
   );
 };
 

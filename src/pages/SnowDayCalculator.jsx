@@ -19,7 +19,10 @@ import {
   Select,
   MenuItem,
   Icon,
-  Snackbar
+  Snackbar,
+  Divider,
+  Slider,
+  FormLabel
 } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import AcUnitIcon from '@mui/icons-material/AcUnit';
@@ -67,7 +70,7 @@ const COMMON_CITIES = {
 
 const SnowDayCalculator = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [searchType, setSearchType] = useState('city');
   const [selectedCountry, setSelectedCountry] = useState('US');
   const [zipCode, setZipCode] = useState('');
@@ -262,7 +265,7 @@ const SnowDayCalculator = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{ py: { xs: 2, sm: 3 } }}>
       <Helmet>
         <title>Snow Day Predictor | Calculate Snow Day Chances - Calculator Hub</title>
         <meta name="description" content="Predict the likelihood of a snow day with our accurate Snow Day Calculator. Uses real-time weather data and historical patterns to forecast school closures. Free and easy to use!" />
@@ -294,29 +297,24 @@ const SnowDayCalculator = () => {
       </Typography>
 
       <Grid container spacing={3}>
-        {/* Input Form Section */}
+        {/* Left Column - Input Form */}
         <Grid item xs={12} md={6}>
           <Paper 
             elevation={3} 
             sx={{ 
-              p: { xs: 2, sm: 3 },
+              p: 3,
               height: '100%',
               display: 'flex',
-              flexDirection: 'column'
+              flexDirection: 'column',
+              bgcolor: 'background.paper'
             }}
           >
-            <Box
-              component="form"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSubmit();
-              }}
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 3
-              }}
-            >
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              Enter Location
+            </Typography>
+            <Divider sx={{ mb: 3 }} />
+            
+            <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
               <FormControl fullWidth>
                 <InputLabel>Country</InputLabel>
                 <Select
@@ -431,17 +429,18 @@ const SnowDayCalculator = () => {
           </Paper>
         </Grid>
 
-        {/* Results Panel */}
+        {/* Right Column - Results */}
         <Grid item xs={12} md={6}>
           <Paper 
             elevation={3} 
             sx={{ 
-              p: { xs: 2, sm: 3 },
+              p: 3,
               height: '100%',
               display: 'flex',
               flexDirection: 'column',
               opacity: prediction !== null ? 1 : 0.7,
-              transition: 'all 0.3s ease'
+              transition: 'all 0.3s ease',
+              bgcolor: 'background.paper'
             }}
           >
             {prediction === null ? (

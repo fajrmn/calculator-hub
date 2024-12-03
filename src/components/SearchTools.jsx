@@ -11,6 +11,8 @@ import {
   Box,
   Popper,
   Fade,
+  Typography,
+  Divider,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { tools } from '../data/tools';
@@ -27,8 +29,12 @@ const SearchTools = () => {
     return tools.filter(tool => 
       tool.name.toLowerCase().includes(query) ||
       tool.description.toLowerCase().includes(query) ||
-      tool.keywords.some(keyword => keyword.toLowerCase().includes(query))
-    );
+      (tool.keywords && tool.keywords.some(keyword => keyword.toLowerCase().includes(query)))
+    ).map(tool => ({
+      ...tool,
+      matchType: tool.name.toLowerCase().includes(query) ? 'name' :
+                 tool.description.toLowerCase().includes(query) ? 'description' : 'keyword'
+    }));
   }, [searchQuery]);
 
   const handleSearchChange = (event) => {
@@ -46,41 +52,108 @@ const SearchTools = () => {
   const id = open ? 'search-popper' : undefined;
 
   return (
-    <Box sx={{ position: 'relative', width: '100%', maxWidth: 600, mx: 'auto' }}>
+    <Box sx={{ position: 'relative' }}>
       <TextField
-        fullWidth
-        placeholder="Search calculators..."
+        size="small"
+        placeholder="Search tools..."
         value={searchQuery}
         onChange={handleSearchChange}
-        variant="outlined"
-        size="small"
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
               <SearchIcon />
             </InputAdornment>
           ),
+          sx: {
+            backgroundColor: 'background.paper',
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'transparent'
+            },
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'divider'
+            },
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'primary.main'
+            }
+          }
         }}
-        sx={{ mb: 2 }}
+        sx={{
+          width: { xs: '200px', sm: '300px' },
+          transition: 'width 0.2s',
+          '&:focus-within': {
+            width: { xs: '250px', sm: '400px' }
+          }
+        }}
       />
       <Popper 
         id={id} 
         open={open} 
-        anchorEl={anchorEl}
+        anchorEl={anchorEl} 
         placement="bottom-start"
         transition
-        style={{ width: anchorEl?.offsetWidth }}
+        sx={{ 
+          width: { xs: '280px', sm: '400px' },
+          zIndex: 1300
+        }}
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
-            <Paper elevation={3}>
-              <List sx={{ width: '100%' }}>
-                {filteredTools.map((tool) => (
-                  <ListItem key={tool.path} disablePadding>
-                    <ListItemButton onClick={() => handleToolSelect(tool.path)}>
-                      <ListItemText 
-                        primary={tool.name}
-                        secondary={tool.description}
+            <Paper 
+              elevation={3}
+              sx={{ 
+                mt: 1,
+                maxHeight: '400px',
+                overflow: 'auto'
+              }}
+            >
+              <List dense>
+                {filteredTools.map((tool, index) => (
+                  <ListItem 
+                    key={tool.path} 
+                    disablePadding
+                    divider={index !== filteredTools.length - 1}
+                  >
+                    <ListItemButton 
+                      onClick={() => handleToolSelect(tool.path)}
+                      sx={{ 
+                        py: 1.5,
+                        '&:hover': {
+                          backgroundColor: 'action.hover'
+                        }
+                      }}
+                    >
+                      <ListItemText
+                        primary={
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            {tool.icon && <span>{tool.icon}</span>}
+                            <Typography variant="subtitle1">
+                              {tool.name}
+                            </Typography>
+                          </Box>
+                        }
+                        secondary={
+                          <Box sx={{ mt: 0.5 }}>
+                            <Typography 
+                              variant="body2" 
+                              color="text.secondary"
+                              sx={{ 
+                                display: '-webkit-box',
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden'
+                              }}
+                            >
+                              {tool.description}
+                            </Typography>
+                            <Typography 
+                              variant="caption" 
+                              color="primary"
+                              sx={{ mt: 0.5, display: 'block' }}
+                            >
+                              {tool.category}
+                            </Typography>
+                          </Box>
+                        }
                       />
                     </ListItemButton>
                   </ListItem>

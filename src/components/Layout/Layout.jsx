@@ -1,13 +1,15 @@
-import { Box, Container } from '@mui/material';
-import Header from './Header';
+import { Box } from '@mui/material';
+import Header from '../Header';
+import PWAPrompt from '../PWAPrompt';
 
 const Layout = ({ children }) => {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Header />
-      <Container component="main" sx={{ mt: 4, mb: 4, flexGrow: 1 }}>
+      <Box component="main" sx={{ flex: 1 }}>
         {children}
-      </Container>
+      </Box>
+      <PWAPrompt />
     </Box>
   );
 };
