@@ -32,6 +32,14 @@ export const tools = [
     keywords: ['bmi', 'health', 'weight', 'height', 'calculator', 'fitness']
   },
   {
+    name: 'BMR Calculator',
+    description: 'Calculate your Basal Metabolic Rate and daily calorie needs',
+    path: '/bmr-calculator',
+    icon: '🔥',
+    category: 'Fitness & Health',
+    keywords: ['bmr', 'metabolism', 'calories', 'health', 'fitness', 'nutrition']
+  },
+  {
     name: 'Calorie Calculator',
     description: 'Calculate your daily calorie needs based on your activity level and goals',
     path: '/calorie-calculator',

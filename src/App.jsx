@@ -10,6 +10,7 @@ import BMICalculator from './pages/BMICalculator';
 import CalorieCalculator from './pages/CalorieCalculator';
 import GradeCalculator from './pages/GradeCalculator';
 import BodyFatCalculator from './pages/BodyFatCalculator';
+import BMRCalculator from './pages/BMRCalculator';
 import { ThemeProvider } from './context/ThemeContext';
 import { Navigate } from 'react-router-dom';
 
@@ -28,6 +29,7 @@ function App() {
               <Route path="/calorie-calculator" element={<CalorieCalculator />} />
               <Route path="/body-fat-calculator" element={<BodyFatCalculator />} />
               <Route path="/grade-calculator" element={<GradeCalculator />} />
+              <Route path="/bmr-calculator" element={<BMRCalculator />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Layout>
