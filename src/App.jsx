@@ -11,13 +11,16 @@ import CalorieCalculator from './pages/CalorieCalculator';
 import GradeCalculator from './pages/GradeCalculator';
 import BodyFatCalculator from './pages/BodyFatCalculator';
 import BMRCalculator from './pages/BMRCalculator';
-import { ThemeProvider } from './context/ThemeContext';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import theme from './theme';
 import { Navigate } from 'react-router-dom';
 
 function App() {
   return (
-    <HelmetProvider>
-      <ThemeProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <HelmetProvider>
         <Router basename="/">
           <Layout>
             <Routes>
@@ -34,8 +37,8 @@ function App() {
             </Routes>
           </Layout>
         </Router>
-      </ThemeProvider>
-    </HelmetProvider>
+      </HelmetProvider>
+    </ThemeProvider>
   );
 }
 
