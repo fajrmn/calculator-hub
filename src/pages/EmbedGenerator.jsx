@@ -114,8 +114,16 @@ const EmbedGenerator = () => {
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
       <Helmet>
-        <title>Embed Code Generator - Calculator Hub</title>
-        <meta name="description" content="Generate embed codes for various content types including YouTube videos, tweets, and more. Customize size and preview before embedding." />
+        <title>Embed Code Generator | Create Custom Embeds - Calculator Hub</title>
+        <meta name="description" content="Generate custom embed codes for your website effortlessly. Supports YouTube, Vimeo, Twitter, Instagram, and more. Customize dimensions and preview live!" />
+        <meta name="keywords" content="embed code generator, custom embeds, YouTube embed, Vimeo embed, Twitter embed, Instagram embed, iframe generator, live preview" />
+        <meta property="og:title" content="Embed Code Generator | Create Custom Embeds" />
+        <meta property="og:description" content="Easily create and customize embed codes for various platforms. Perfect for bloggers, web developers, and digital marketers." />
+        <meta property="og:type" content="website" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://calculator-hub.netlify.app/embed-generator" />
+        <meta name="author" content="Calculator Hub" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Helmet>
 
       <Typography 

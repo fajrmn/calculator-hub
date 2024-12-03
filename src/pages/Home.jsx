@@ -8,8 +8,14 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <title>Calculator Hub - Free Online Calculators</title>
-        <meta name="description" content="Access a collection of useful online calculators including Snow Day predictions and Vorici Chromatic Orb crafting calculator. Free, easy to use, and accurate calculations." />
+        <title>Calculator Hub - Your Ultimate Destination for Free Online Calculators and Tools</title>
+        <meta name="description" content="Explore our vast collection of free online calculators and tools, covering various categories such as finance, health, education, and more. Discover the perfect tool for your needs, with easy-to-use interfaces and mobile-friendly designs." />
+        <meta name="keywords" content="online calculators, free tools, calculator hub, web tools, finance calculators, health calculators, education calculators, snow day predictor, vorici calculator, embed generator, unit converters, math calculators" />
+        <meta property="og:title" content="Calculator Hub - Your Ultimate Destination for Free Online Calculators and Tools" />
+        <meta property="og:description" content="Unlock a world of free online calculators and tools, designed to simplify complex calculations and provide accurate results. Browse our extensive collection today!" />
+        <meta property="og:type" content="website" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://calculator-hub.netlify.app/" />
       </Helmet>
       
       <Typography variant="h3" component="h1" gutterBottom>

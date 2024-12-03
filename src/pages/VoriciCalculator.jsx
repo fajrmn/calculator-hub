@@ -61,8 +61,16 @@ const VoriciCalculator = () => {
   return (
     <>
       <Helmet>
-        <title>Vorici Calculator - Path of Exile Chromatic Crafting</title>
-        <meta name="description" content="Calculate optimal Chromatic Orb crafting strategies for Path of Exile. Get success rates, costs, and recommendations for socket color combinations." />
+        <title>Vorici Calculator | Chromatic Orb Crafting - Calculator Hub</title>
+        <meta name="description" content="Calculate the probability of crafting specific socket colors on Path of Exile items using the Vorici Calculator. Enhance your crafting strategy with accurate insights!" />
+        <meta name="keywords" content="vorici calculator, chromatic orb calculator, path of exile crafting, socket color calculator, PoE tools, crafting probability" />
+        <meta property="og:title" content="Vorici Calculator | Chromatic Orb Crafting" />
+        <meta property="og:description" content="Optimize your Path of Exile crafting with the Vorici Calculator. Calculate socket color probabilities and enhance your gameplay strategy." />
+        <meta property="og:type" content="website" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://calculator-hub.netlify.app/vorici-calculator" />
+        <meta name="author" content="Calculator Hub" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Helmet>
 
       <Typography variant="h4" component="h1" gutterBottom>
