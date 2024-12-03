@@ -358,23 +358,58 @@ const EducationSavingsCalculator = () => {
               </Typography>
             )}
           </Paper>
-
-          <InfoSection>
-            <Typography variant="subtitle1" sx={{ mt: 2 }}>
-              Important Notes:
-            </Typography>
-            <Typography variant="body1">
-              • All calculations are estimates based on provided inputs
-              • College costs typically increase faster than general inflation
-              • Consider using tax-advantaged 529 plans for education savings
-              • Investment returns are not guaranteed and may vary
-              • Consult with a financial advisor for personalized advice
-              • Remember to factor in additional costs like books and living expenses
-              • Review and adjust your savings plan regularly
-            </Typography>
-          </InfoSection>
         </Grid>
       </Grid>
+
+      <InfoSection title="Understanding Education Savings">
+        <Typography variant="body1">
+          The Education Savings Calculator helps parents and guardians plan for their children's future education expenses. This comprehensive tool considers various factors affecting college costs and savings strategies.
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Types of College Expenses:
+        </Typography>
+        <Typography variant="body1">
+          • Tuition and Fees: Primary educational costs
+          • Room and Board: Housing and meal expenses
+          • Books and Supplies: Academic materials
+          • Personal Expenses: Daily living costs
+          • Transportation: Travel and commuting expenses
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Savings Options and Strategies:
+        </Typography>
+        <Typography variant="body1">
+          • 529 Plans: Tax-advantaged education savings accounts
+          • Coverdell ESAs: Educational savings accounts with tax benefits
+          • UGMA/UTMA Accounts: Custodial accounts for minors
+          • Savings Bonds: Government-backed securities
+          • Regular Investment Accounts: Flexible savings options
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Factors Affecting College Costs:
+        </Typography>
+        <Typography variant="body1">
+          • Institution Type: Public vs. private, 2-year vs. 4-year
+          • Location: In-state vs. out-of-state tuition
+          • College Cost Inflation: Historical average of 5-7% annually
+          • Financial Aid: Grants, scholarships, and loans
+          • Economic Conditions: Market performance and inflation
+        </Typography>
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Smart Saving Tips:
+        </Typography>
+        <Typography variant="body1">
+          • Start saving early to maximize compound interest
+          • Consider tax-advantaged savings options
+          • Regularly review and adjust savings strategy
+          • Research financial aid opportunities
+          • Balance education savings with other financial goals
+        </Typography>
+      </InfoSection>
     </Container>
   );
 };

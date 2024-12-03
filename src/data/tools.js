@@ -69,6 +69,14 @@ export const tools = [
     keywords: ['grade', 'education', 'school', 'exam', 'course', 'gpa']
   },
   {
+    name: 'GPA Calculator',
+    description: 'Calculate your current GPA, plan future grades, and understand GPA requirements for academic goals.',
+    path: '/gpa-calculator',
+    icon: '🏫',
+    category: 'Education Tools',
+    id: 'gpa-calculator'
+  },
+  {
     name: 'Children\'s Education Calculator',
     description: 'Plan and calculate savings needed for your child\'s college education',
     path: '/education-savings-calculator',

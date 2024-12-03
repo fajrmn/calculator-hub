@@ -15,6 +15,7 @@ import DateCalculator from './pages/DateCalculator';
 import ProductivityCalculator from './pages/ProductivityCalculator';
 import PersonalProductivityCalculator from './pages/PersonalProductivityCalculator';
 import EducationSavingsCalculator from './pages/EducationSavingsCalculator';
+import GPACalculator from './pages/GPACalculator';
 import { ThemeProvider } from './context/ThemeContext';
 import { Navigate } from 'react-router-dom';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -41,6 +42,7 @@ function App() {
                 <Route path="/productivity-calculator" element={<ProductivityCalculator />} />
                 <Route path="/personal-productivity-calculator" element={<PersonalProductivityCalculator />} />
                 <Route path="/education-savings-calculator" element={<EducationSavingsCalculator />} />
+                <Route path="/gpa-calculator" element={<GPACalculator />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </Layout>
