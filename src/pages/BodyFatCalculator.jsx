@@ -17,10 +17,18 @@ import {
   TableRow,
   Paper,
   LinearProgress,
+  Grid,
+  Container,
+  useTheme,
+  useMediaQuery,
+  Divider,
 } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 
 const BodyFatCalculator = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
   const [gender, setGender] = useState('male');
   const [age, setAge] = useState('');
   const [weight, setWeight] = useState('');
@@ -92,195 +100,266 @@ const BodyFatCalculator = () => {
   };
 
   return (
-    <Box sx={{ maxWidth: 800, mx: 'auto', p: 2 }}>
+    <Container maxWidth="lg">
       <Helmet>
         <title>Body Fat Calculator - Calculator Hub</title>
         <meta name="description" content="Calculate your body fat percentage using the U.S. Navy method or BMI method." />
       </Helmet>
 
-      <Typography variant="h4" gutterBottom>
-        Body Fat Calculator
-      </Typography>
+      <Box sx={{ py: 4 }}>
+        <Typography variant="h4" gutterBottom align="center">
+          Body Fat Calculator
+        </Typography>
 
-      <Typography variant="body1" paragraph>
-        Calculate your body fat percentage using the U.S. Navy method. For the most accurate results, measure all circumferences at the widest point and to the nearest 0.5 cm.
-      </Typography>
+        <Typography variant="body1" paragraph align="center" sx={{ mb: 4 }}>
+          Calculate your body fat percentage using the U.S. Navy method. For the most accurate results, measure all circumferences at the widest point and to the nearest 0.5 cm.
+        </Typography>
 
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Typography variant="subtitle1" gutterBottom>
-            Body Fat Categories:
+        <Grid container spacing={3}>
+          {/* Input Form */}
+          <Grid item xs={12} md={6}>
+            <Paper elevation={2} sx={{ p: 3 }}>
+              <form onSubmit={handleSubmit}>
+                <FormControl component="fieldset" fullWidth sx={{ mb: 3 }}>
+                  <Typography variant="subtitle1" gutterBottom>
+                    Gender
+                  </Typography>
+                  <RadioGroup
+                    row
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                  >
+                    <FormControlLabel value="male" control={<Radio />} label="Male" />
+                    <FormControlLabel value="female" control={<Radio />} label="Female" />
+                  </RadioGroup>
+                </FormControl>
+
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Age"
+                      type="number"
+                      value={age}
+                      onChange={(e) => setAge(e.target.value)}
+                      required
+                      fullWidth
+                      placeholder="25"
+                      helperText="Example: 25 years"
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Weight (kg)"
+                      type="number"
+                      value={weight}
+                      onChange={(e) => setWeight(e.target.value)}
+                      required
+                      fullWidth
+                      placeholder="70"
+                      helperText="Example: 70 kg"
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Height (cm)"
+                      type="number"
+                      value={height}
+                      onChange={(e) => setHeight(e.target.value)}
+                      required
+                      fullWidth
+                      placeholder="178"
+                      helperText="Example: 178 cm"
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Neck Circumference (cm)"
+                      type="number"
+                      value={neck}
+                      onChange={(e) => setNeck(e.target.value)}
+                      required
+                      fullWidth
+                      placeholder="38"
+                      helperText="Example: 38 cm (measure at the narrowest point)"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Waist Circumference (cm)"
+                      type="number"
+                      value={waist}
+                      onChange={(e) => setWaist(e.target.value)}
+                      required
+                      fullWidth
+                      placeholder="85"
+                      helperText="Example: 85 cm (measure at navel level)"
+                    />
+                  </Grid>
+                </Grid>
+
+                <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    fullWidth
+                  >
+                    Calculate
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outlined"
+                    onClick={handleClear}
+                    size="large"
+                    fullWidth
+                  >
+                    Clear
+                  </Button>
+                </Box>
+              </form>
+            </Paper>
+          </Grid>
+
+          {/* Results Section */}
+          <Grid item xs={12} md={6}>
+            <Paper elevation={2} sx={{ p: 3, height: '100%' }}>
+              {results ? (
+                <>
+                  <Typography variant="h6" gutterBottom>
+                    Results
+                  </Typography>
+
+                  <Box sx={{ mb: 3 }}>
+                    <Typography variant="h5" color="primary" gutterBottom>
+                      Body Fat: {results.bodyFatPercentage}%
+                    </Typography>
+                    <Box sx={{ width: '100%', mt: 1 }}>
+                      <LinearProgress
+                        variant="determinate"
+                        value={Math.min(100, (parseFloat(results.bodyFatPercentage) / 40) * 100)}
+                        sx={{
+                          height: 20,
+                          borderRadius: 1,
+                          bgcolor: '#e0e0e0',
+                          '& .MuiLinearProgress-bar': {
+                            bgcolor: parseFloat(results.bodyFatPercentage) > 25 ? 'error.main' : 'success.main',
+                          },
+                        }}
+                      />
+                    </Box>
+                  </Box>
+
+                  <TableContainer component={Paper} variant="outlined">
+                    <Table>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell>Body Fat Category</TableCell>
+                          <TableCell>{results.category}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Body Fat Mass</TableCell>
+                          <TableCell>{results.bodyFatMass} kg</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Lean Body Mass</TableCell>
+                          <TableCell>{results.leanBodyMass} kg</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Ideal Body Fat</TableCell>
+                          <TableCell>{results.idealBodyFat}%</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Body Fat to Lose</TableCell>
+                          <TableCell>{results.bodyFatToLose} kg</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </>
+              ) : (
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                  <Typography variant="body1" color="text.secondary">
+                    Enter your measurements to see the results
+                  </Typography>
+                </Box>
+              )}
+            </Paper>
+          </Grid>
+        </Grid>
+
+        {/* Body Fat Categories Reference */}
+        <Paper elevation={2} sx={{ mt: 4, p: 3 }}>
+          <Typography variant="h6" gutterBottom>
+            Body Fat Categories Reference
           </Typography>
-          <Typography variant="body2" component="div">
-            <strong>For Men:</strong>
-            <ul>
-              <li>Essential Fat: 2-5%</li>
-              <li>Athletes: 6-13%</li>
-              <li>Fitness: 14-17%</li>
-              <li>Average: 18-24%</li>
-              <li>Obese: 25% and higher</li>
-            </ul>
-            <strong>For Women:</strong>
-            <ul>
-              <li>Essential Fat: 10-13%</li>
-              <li>Athletes: 14-20%</li>
-              <li>Fitness: 21-24%</li>
-              <li>Average: 25-31%</li>
-              <li>Obese: 32% and higher</li>
-            </ul>
-          </Typography>
-        </CardContent>
-      </Card>
-
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <form onSubmit={handleSubmit}>
-            <FormControl component="fieldset" sx={{ mb: 2 }}>
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={6}>
               <Typography variant="subtitle1" gutterBottom>
-                Gender
+                For Men:
               </Typography>
-              <RadioGroup
-                row
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
-              >
-                <FormControlLabel value="male" control={<Radio />} label="Male" />
-                <FormControlLabel value="female" control={<Radio />} label="Female" />
-              </RadioGroup>
-            </FormControl>
-
-            <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' } }}>
-              <TextField
-                label="Age"
-                type="number"
-                value={age}
-                onChange={(e) => setAge(e.target.value)}
-                required
-                fullWidth
-                placeholder="25"
-                helperText="Example: 25 years"
-              />
-              <TextField
-                label="Weight (kg)"
-                type="number"
-                value={weight}
-                onChange={(e) => setWeight(e.target.value)}
-                required
-                fullWidth
-                placeholder="70"
-                helperText="Example: 70 kg"
-              />
-              <TextField
-                label="Height (cm)"
-                type="number"
-                value={height}
-                onChange={(e) => setHeight(e.target.value)}
-                required
-                fullWidth
-                placeholder="178"
-                helperText="Example: 178 cm"
-              />
-              <TextField
-                label="Neck Circumference (cm)"
-                type="number"
-                value={neck}
-                onChange={(e) => setNeck(e.target.value)}
-                required
-                fullWidth
-                placeholder="38"
-                helperText="Example: 38 cm (measure at the narrowest point)"
-              />
-              <TextField
-                label="Waist Circumference (cm)"
-                type="number"
-                value={waist}
-                onChange={(e) => setWaist(e.target.value)}
-                required
-                fullWidth
-                placeholder="85"
-                helperText="Example: 85 cm (measure at navel level)"
-              />
-            </Box>
-
-            <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                size="large"
-              >
-                Calculate
-              </Button>
-              <Button
-                type="button"
-                variant="outlined"
-                onClick={handleClear}
-                size="large"
-              >
-                Clear
-              </Button>
-            </Box>
-          </form>
-        </CardContent>
-      </Card>
-
-      {results && (
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              Results
-            </Typography>
-
-            <Box sx={{ mb: 3 }}>
-              <Typography variant="h5" color="primary" gutterBottom>
-                Body Fat: {results.bodyFatPercentage}%
+              <TableContainer>
+                <Table size="small">
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>Essential Fat</TableCell>
+                      <TableCell>2-5%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Athletes</TableCell>
+                      <TableCell>6-13%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Fitness</TableCell>
+                      <TableCell>14-17%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Average</TableCell>
+                      <TableCell>18-24%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Obese</TableCell>
+                      <TableCell>25% and higher</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Typography variant="subtitle1" gutterBottom>
+                For Women:
               </Typography>
-              <Box sx={{ width: '100%', mt: 1 }}>
-                <LinearProgress
-                  variant="determinate"
-                  value={Math.min(100, (parseFloat(results.bodyFatPercentage) / 40) * 100)}
-                  sx={{
-                    height: 20,
-                    borderRadius: 1,
-                    bgcolor: '#e0e0e0',
-                    '& .MuiLinearProgress-bar': {
-                      bgcolor: parseFloat(results.bodyFatPercentage) > 25 ? 'error.main' : 'success.main',
-                    },
-                  }}
-                />
-              </Box>
-            </Box>
-
-            <TableContainer component={Paper} variant="outlined">
-              <Table>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>Body Fat Category</TableCell>
-                    <TableCell>{results.category}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Body Fat Mass</TableCell>
-                    <TableCell>{results.bodyFatMass} kg</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Lean Body Mass</TableCell>
-                    <TableCell>{results.leanBodyMass} kg</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Ideal Body Fat</TableCell>
-                    <TableCell>{results.idealBodyFat}%</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Body Fat to Lose</TableCell>
-                    <TableCell>{results.bodyFatToLose} kg</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </CardContent>
-        </Card>
-      )}
-    </Box>
+              <TableContainer>
+                <Table size="small">
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>Essential Fat</TableCell>
+                      <TableCell>10-13%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Athletes</TableCell>
+                      <TableCell>14-20%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Fitness</TableCell>
+                      <TableCell>21-24%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Average</TableCell>
+                      <TableCell>25-31%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Obese</TableCell>
+                      <TableCell>32% and higher</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Grid>
+          </Grid>
+        </Paper>
+      </Box>
+    </Container>
   );
 };
 
