@@ -44,7 +44,14 @@ const Home = () => {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button component={RouterLink} to={calc.path} size="small" color="primary">
+                <Button 
+                  component={RouterLink} 
+                  to={calc.path} 
+                  size="large" 
+                  color="primary" 
+                  variant="contained"
+                  sx={{ width: '100%' }}
+                >
                   Open Calculator
                 </Button>
               </CardActions>

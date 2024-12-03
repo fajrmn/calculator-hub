@@ -11,12 +11,13 @@ function App() {
   return (
     <HelmetProvider>
       <ThemeProvider>
-        <Router>
+        <Router basename="/">
           <Layout>
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route exact path="/" element={<Home />} />
               <Route path="/snow-day-calculator" element={<SnowDayCalculator />} />
               <Route path="/vorici-calculator" element={<VoriciCalculator />} />
+              <Route path="*" element={<Home />} />
             </Routes>
           </Layout>
         </Router>
