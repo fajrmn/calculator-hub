@@ -142,6 +142,10 @@ const SnowDayCalculator = () => {
     setLoading(true);
 
     try {
+      if (!OPENWEATHER_API_KEY) {
+        throw new Error('OpenWeather API key is not configured');
+      }
+
       let coords;
       if (searchType === 'zip') {
         const response = await fetch(
@@ -156,9 +160,10 @@ const SnowDayCalculator = () => {
         const response = await fetch(
           `https://api.openweathermap.org/geo/1.0/direct?q=${searchQuery},${selectedCountry}&limit=1&appid=${OPENWEATHER_API_KEY}`
         );
-        if (!response.ok) throw new Error('City not found');
         const data = await response.json();
-        if (!data.length) throw new Error('City not found');
+        if (!response.ok || !data.length) {
+          throw new Error(`City "${searchQuery}" not found. Please try another city name.`);
+        }
         coords = data[0];
       }
 
