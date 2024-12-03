@@ -13,6 +13,11 @@ const calculators = [
     description: 'Calculate Chromatic Orb crafting statistics including costs, success rates, and optimal strategies.',
     path: '/vorici-calculator',
   },
+  {
+    title: 'Embed Generator',
+    description: 'Generate embed codes for various content types including YouTube videos, tweets, and more. Customize size and preview before embedding.',
+    path: '/embed-generator',
+  },
 ];
 
 const Home = () => {
@@ -33,9 +38,9 @@ const Home = () => {
 
       <Grid container spacing={3} sx={{ mt: 2 }}>
         {calculators.map((calc) => (
-          <Grid item xs={12} sm={6} key={calc.path}>
-            <Card>
-              <CardContent>
+          <Grid item xs={12} sm={6} md={4} key={calc.path}>
+            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <CardContent sx={{ flexGrow: 1 }}>
                 <Typography variant="h5" component="h2" gutterBottom>
                   {calc.title}
                 </Typography>
