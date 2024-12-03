@@ -264,38 +264,29 @@ const SnowDayCalculator = () => {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Helmet>
-        <title>Snow Day Predictor - Calculator Hub</title>
-        <meta name="description" content="Calculate the probability of a snow day based on weather conditions in your city." />
+        <title>Snow Day Calculator - Calculator Hub</title>
+        <meta name="description" content="Calculate the probability of a snow day based on weather conditions" />
       </Helmet>
 
-      <Box sx={{ 
-        textAlign: { xs: 'center', md: 'left' },
-        mb: 4 
-      }}>
-        <Typography 
-          variant="h4" 
-          component="h1" 
-          gutterBottom
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: { xs: 'center', md: 'flex-start' },
-            gap: 2,
-            fontSize: { xs: '1.75rem', md: '2.125rem' }
-          }}
-        >
-          <AcUnitIcon sx={{ fontSize: 'inherit' }} /> Snow Day Predictor
-        </Typography>
-        <Typography 
-          variant="subtitle1" 
-          color="text.secondary"
-          sx={{ maxWidth: '600px', mx: { xs: 'auto', md: 0 } }}
-        >
-          Enter your city name to calculate the probability of a snow day based on current weather conditions.
-        </Typography>
-      </Box>
+      <Typography 
+        variant="h4" 
+        component="h1" 
+        gutterBottom
+        sx={{ 
+          mb: 4,
+          textAlign: { xs: 'center', md: 'left' },
+          fontSize: { xs: '1.75rem', md: '2.125rem' },
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: { xs: 'center', md: 'flex-start' },
+          gap: 2
+        }}
+      >
+        ❄️ Snow Day Predictor
+      </Typography>
 
       <Grid container spacing={3}>
+        {/* Input Form Section */}
         <Grid item xs={12} md={6}>
           <Paper 
             elevation={3} 
@@ -337,6 +328,11 @@ const SnowDayCalculator = () => {
                 value={searchType}
                 onChange={handleSearchTypeChange}
                 centered
+                sx={{
+                  borderBottom: 1,
+                  borderColor: 'divider',
+                  mb: 2
+                }}
               >
                 <Tab label="Search by ZIP" value="zip" />
                 <Tab label="Search by City" value="city" />
@@ -348,10 +344,9 @@ const SnowDayCalculator = () => {
                   label="ZIP Code"
                   value={zipCode}
                   onChange={(e) => setZipCode(e.target.value)}
-                  disabled={loading}
                   error={!!error}
-                  helperText={error || 'Enter your ZIP code'}
-                  sx={{ mb: 2 }}
+                  helperText={error || ''}
+                  inputProps={{ maxLength: 5 }}
                 />
               ) : (
                 <Autocomplete
@@ -363,7 +358,7 @@ const SnowDayCalculator = () => {
                   inputValue={cityInputValue}
                   onInputChange={(_, value) => {
                     setCityInputValue(value || '');
-                    setError(''); // Clear error when user types
+                    setError('');
                   }}
                   onChange={handleCitySelect}
                   renderOption={(props, option) => (
@@ -382,9 +377,8 @@ const SnowDayCalculator = () => {
                     <TextField
                       {...params}
                       label="Enter city name"
-                      disabled={loading}
                       error={!!error}
-                      helperText={error || 'Enter your city name (e.g., Boston, MA)'}
+                      helperText={error || ''}
                       InputProps={{
                         ...params.InputProps,
                         endAdornment: (
@@ -399,18 +393,15 @@ const SnowDayCalculator = () => {
                 />
               )}
 
-              <Box sx={{ flexGrow: 1 }} />
-
               <Button
                 variant="contained"
-                color="primary"
-                onClick={handleSubmit}
-                disabled={!cityName && !zipCode || loading}
+                type="submit"
+                disabled={loading || (searchType === 'city' && !cityInputValue) || (searchType === 'zip' && !zipCode)}
                 size="large"
-                sx={{
+                sx={{ 
+                  mt: 'auto',
                   py: 1.5,
-                  fontSize: '1.1rem',
-                  position: 'relative'
+                  fontSize: '1.1rem'
                 }}
               >
                 {loading ? (
@@ -425,13 +416,14 @@ const SnowDayCalculator = () => {
                     }}
                   />
                 ) : (
-                  'Calculate Probability'
+                  'Check Snow Day Probability'
                 )}
               </Button>
             </Box>
           </Paper>
         </Grid>
 
+        {/* Results Panel */}
         <Grid item xs={12} md={6}>
           <Paper 
             elevation={3} 
@@ -440,11 +432,11 @@ const SnowDayCalculator = () => {
               height: '100%',
               display: 'flex',
               flexDirection: 'column',
-              opacity: prediction !== null ? 1 : 0.5,
-              transition: 'opacity 0.3s ease'
+              opacity: prediction !== null ? 1 : 0.7,
+              transition: 'all 0.3s ease'
             }}
           >
-            {!prediction && !loading && (
+            {prediction === null ? (
               <Box 
                 sx={{ 
                   display: 'flex',
@@ -456,12 +448,10 @@ const SnowDayCalculator = () => {
                 }}
               >
                 <Typography variant="h6">
-                  Enter a city name to see the snow day prediction
+                  Enter a location to see the snow day prediction
                 </Typography>
               </Box>
-            )}
-
-            {prediction !== null && (
+            ) : weatherData && (
               <Box sx={{ textAlign: 'center' }}>
                 <Typography 
                   variant="h5" 
@@ -472,55 +462,88 @@ const SnowDayCalculator = () => {
                     mb: 3
                   }}
                 >
-                  Snow Day Prediction
+                  Snow Day Prediction for {weatherData.city.name}
                 </Typography>
 
-                <Box 
+                <Typography 
+                  variant="h2" 
                   sx={{ 
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: 2
+                    fontWeight: 'bold',
+                    color: prediction > 70 ? theme.palette.success.main : theme.palette.primary.main,
+                    mb: 2
                   }}
                 >
-                  <Typography variant="h3" component="div" sx={{ fontWeight: 'bold' }}>
-                    {prediction}%
-                  </Typography>
-                  
-                  <Typography 
-                    variant="h6" 
-                    sx={{ 
-                      color: 'text.secondary',
-                      maxWidth: '400px',
-                      mx: 'auto'
-                    }}
-                  >
-                    {weatherData.list[0].weather[0].description}
-                  </Typography>
+                  {prediction}%
+                </Typography>
 
-                  <Box sx={{ mt: 3, width: '100%' }}>
-                    <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                      Current Weather Conditions:
-                    </Typography>
-                    <Grid container spacing={2} sx={{ mt: 1 }}>
-                      <Grid item xs={6}>
-                        <Typography variant="body2">
-                          Temperature: {Math.round(weatherData.list[0].main.temp_min)}°F to {Math.round(weatherData.list[0].main.temp_max)}°F
+                <Typography 
+                  variant="h6" 
+                  sx={{ 
+                    color: 'text.secondary',
+                    mb: 4
+                  }}
+                >
+                  {prediction > 90 ? '🎉 Almost Certain Snow Day!' :
+                   prediction > 70 ? '🌨️ Very Likely Snow Day!' :
+                   prediction > 50 ? '❄️ Decent Chance!' :
+                   prediction > 30 ? '🌥️ Small Chance...' :
+                   '☀️ Probably Not Today'}
+                </Typography>
+
+                <Grid container spacing={2} sx={{ mt: 2 }}>
+                  {[
+                    { icon: '🌡️', label: 'Temperature', value: `${Math.round(weatherData.list[0].main.temp)}°F` },
+                    { icon: '💨', label: 'Wind Speed', value: `${Math.round(weatherData.list[0].wind.speed)} mph` },
+                    { icon: '🌥️', label: 'Conditions', value: weatherData.list[0].weather[0].description, capitalize: true }
+                  ].map(({ icon, label, value, capitalize }) => (
+                    <Grid item xs={12} sm={4} key={label}>
+                      <Paper 
+                        elevation={1}
+                        sx={{ 
+                          p: 2,
+                          height: '100%',
+                          bgcolor: 'background.default'
+                        }}
+                      >
+                        <Box sx={{ mb: 1 }}>
+                          <Typography variant="h6" component="span">
+                            {icon}
+                          </Typography>
+                        </Box>
+                        <Typography 
+                          variant="body2" 
+                          color="text.secondary"
+                          gutterBottom
+                        >
+                          {label}
                         </Typography>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Typography variant="body2">
-                          Wind Speed: {Math.round(weatherData.list[0].wind.speed)} mph
+                        <Typography 
+                          variant="body1"
+                          sx={{ 
+                            fontWeight: 'medium',
+                            textTransform: capitalize ? 'capitalize' : 'none'
+                          }}
+                        >
+                          {value}
                         </Typography>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Typography variant="body2">
-                          Conditions: {weatherData.list[0].weather[0].description}
-                        </Typography>
-                      </Grid>
+                      </Paper>
                     </Grid>
+                  ))}
+                </Grid>
+
+                {prediction > 70 && (
+                  <Box sx={{ mt: 4 }}>
+                    <Typography 
+                      variant="h6" 
+                      sx={{ 
+                        color: theme.palette.success.main,
+                        fontWeight: 'medium'
+                      }}
+                    >
+                      🎊 Time to prepare your snow day activities! 🎊
+                    </Typography>
                   </Box>
-                </Box>
+                )}
               </Box>
             )}
           </Paper>
@@ -532,7 +555,10 @@ const SnowDayCalculator = () => {
         autoHideDuration={2000}
         onClose={() => setSnackbarOpen(false)}
         message="Copied to clipboard"
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ 
+          vertical: 'bottom',
+          horizontal: 'center'
+        }}
       />
     </Container>
   );
