@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Tooltip, IconButton } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
 
 const EmbedPreview = ({ embedCode, width, height }) => {
   const containerRef = useRef(null);
@@ -42,9 +43,14 @@ const EmbedPreview = ({ embedCode, width, height }) => {
 
   return (
     <Box sx={{ mt: 3 }}>
-      <Typography variant="h6" gutterBottom>
-        Preview
-      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+        <Typography variant="h6">Preview</Typography>
+        <Tooltip title="Some links may not work if they are not on a public domain or have blocked embedding." arrow>
+          <IconButton size="small" color="primary">
+            <InfoIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      </Box>
       <Box
         ref={containerRef}
         sx={{

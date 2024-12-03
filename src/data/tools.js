@@ -10,6 +10,12 @@ export const tools = [
     description: 'Calculate chromatic orb crafting probabilities',
     path: '/vorici-calculator',
     keywords: ['vorici', 'crafting', 'chromatic', 'orb', 'socket']
+  },
+  {
+    name: 'Embed Generator',
+    description: 'Generate embed codes for various content types including YouTube videos, tweets, and more',
+    path: '/embed-generator',
+    keywords: ['embed', 'youtube', 'twitter', 'instagram', 'vimeo', 'iframe', 'social media', 'video']
   }
   // Add more tools here as they become available
 ];

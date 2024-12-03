@@ -1,24 +1,8 @@
 import { Typography, Grid, Card, CardContent, CardActions, Button } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-
-const calculators = [
-  {
-    title: 'Snow Day Predictor',
-    description: 'Get instant predictions for school closures based on real-time weather forecasts. Just enter your ZIP code to check if tomorrow might be a snow day!',
-    path: '/snow-day-calculator',
-  },
-  {
-    title: 'Vorici Calculator',
-    description: 'Calculate Chromatic Orb crafting statistics including costs, success rates, and optimal strategies.',
-    path: '/vorici-calculator',
-  },
-  {
-    title: 'Embed Generator',
-    description: 'Generate embed codes for various content types including YouTube videos, tweets, and more. Customize size and preview before embedding.',
-    path: '/embed-generator',
-  },
-];
+import SearchTools from '../components/SearchTools';
+import { tools } from '../data/tools';
 
 const Home = () => {
   return (
@@ -32,26 +16,28 @@ const Home = () => {
         Welcome to Calculator Hub
       </Typography>
       
-      <Typography variant="h6" component="h2" gutterBottom color="textSecondary">
-        Choose a calculator to get started:
+      <SearchTools />
+      
+      <Typography variant="h6" component="h2" gutterBottom color="textSecondary" sx={{ mt: 4 }}>
+        All Tools:
       </Typography>
 
       <Grid container spacing={3} sx={{ mt: 2 }}>
-        {calculators.map((calc) => (
-          <Grid item xs={12} sm={6} md={4} key={calc.path}>
+        {tools.map((tool) => (
+          <Grid item xs={12} sm={6} md={4} key={tool.path}>
             <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
               <CardContent sx={{ flexGrow: 1 }}>
                 <Typography variant="h5" component="h2" gutterBottom>
-                  {calc.title}
+                  {tool.name}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                  {calc.description}
+                  {tool.description}
                 </Typography>
               </CardContent>
               <CardActions>
                 <Button 
                   component={RouterLink} 
-                  to={calc.path} 
+                  to={tool.path} 
                   size="large" 
                   color="primary" 
                   variant="contained"
